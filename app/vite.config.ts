@@ -30,5 +30,6 @@ function dataManifestPlugin() {
 }
 
 export default defineConfig({
+  base: '/wa-fuel-info/',
   plugins: [react(), tailwindcss(), dataManifestPlugin()],
 })
