@@ -12,9 +12,9 @@ export function Header() {
     <header className="bg-gradient-to-r from-blue-700 to-blue-900 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">FuelWatch WA</h1>
+          <h1 className="text-2xl font-bold tracking-tight">WA Fuel Info</h1>
           <p className="text-blue-200 text-sm mt-0.5">
-            Western Australia Fuel Price Analysis
+            Western Australia Fuel Price Information
             {latestDate && <span className="ml-2">— Data up to {latestDate}</span>}
           </p>
         </div>

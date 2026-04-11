@@ -58,7 +58,7 @@ export function ExcelExport() {
       XLSX.utils.book_append_sheet(wb, ws, 'All Data')
     }
 
-    XLSX.writeFile(wb, `FuelWatch_WA_${latestDate}.xlsx`)
+    XLSX.writeFile(wb, `WA_Fuel_Info_${latestDate}.xlsx`)
   }, [records, latestDate])
 
   return (

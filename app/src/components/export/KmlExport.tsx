@@ -47,8 +47,8 @@ export function KmlExport() {
       const kml = `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
-    <name>FuelWatch WA - ${FUEL_LABELS[ft]} - ${latestDate}</name>
-    <description>Fuel prices from FuelWatch Western Australia</description>
+    <name>WA Fuel Info - ${FUEL_LABELS[ft]} - ${latestDate}</name>
+    <description>Fuel prices from WA Fuel Info</description>
 ${placemarks}
   </Document>
 </kml>`
@@ -57,7 +57,7 @@ ${placemarks}
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `FuelWatch_${ft}_${latestDate}.kml`
+      a.download = `WA_Fuel_Info_${ft}_${latestDate}.kml`
       a.click()
       URL.revokeObjectURL(url)
       setShowPicker(false)
