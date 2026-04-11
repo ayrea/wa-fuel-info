@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import { useFuelStore } from '../../data/store'
 import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
@@ -16,8 +16,9 @@ function priceColor(price: number | null, min: number, max: number): string {
 
 function MapAutoFit({ records }: { records: FuelRecord[] }) {
   const map = useMap()
+  const hasFitted = useRef(false)
   useEffect(() => {
-    if (records.length === 0) return
+    if (hasFitted.current || records.length === 0) return
     const lats = records.map((r) => r.latitude)
     const lngs = records.map((r) => r.longitude)
     const bounds: [[number, number], [number, number]] = [
@@ -25,6 +26,7 @@ function MapAutoFit({ records }: { records: FuelRecord[] }) {
       [Math.max(...lats), Math.max(...lngs)],
     ]
     map.fitBounds(bounds, { padding: [30, 30] })
+    hasFitted.current = true
   }, [records, map])
   return null
 }

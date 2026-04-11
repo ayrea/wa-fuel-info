@@ -1,8 +1,8 @@
-import { useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import { useFuelStore } from '../../data/store'
 import { getOutages } from '../../data/selectors'
-import { FUEL_COLORS } from '../../types/fuel'
+import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
 import type { FuelRecord, FuelType } from '../../types/fuel'
 
 interface StationOutage {
@@ -56,12 +56,33 @@ function groupByStation(records: FuelRecord[]): StationOutage[] {
 }
 
 export function OutageList() {
+  const [selectedFuels, setSelectedFuels] = useState<Set<FuelType>>(() => new Set(FUEL_TYPES))
   const records = useFuelStore((s) => s.records)
 
-  const outageRecords = useMemo(() => getOutages(records), [records])
-  const stations = useMemo(() => groupByStation(outageRecords), [outageRecords])
+  const allSelected = selectedFuels.size === FUEL_TYPES.length
 
-  if (stations.length === 0) {
+  const toggleFuel = (ft: FuelType) => {
+    setSelectedFuels((prev) => {
+      const next = new Set(prev)
+      if (next.has(ft)) {
+        if (next.size > 1) next.delete(ft)
+      } else {
+        next.add(ft)
+      }
+      return next
+    })
+  }
+
+  const selectAll = () => setSelectedFuels(new Set(FUEL_TYPES))
+
+  const allOutageRecords = useMemo(() => getOutages(records), [records])
+  const filteredRecords = useMemo(
+    () => allSelected ? allOutageRecords : allOutageRecords.filter((r) => selectedFuels.has(r.fuelType)),
+    [allOutageRecords, selectedFuels, allSelected]
+  )
+  const stations = useMemo(() => groupByStation(filteredRecords), [filteredRecords])
+
+  if (allOutageRecords.length === 0) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
         <div className="text-5xl mb-4">✅</div>
@@ -75,6 +96,41 @@ export function OutageList() {
 
   return (
     <div className="space-y-4">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <label className="text-sm font-medium text-gray-700">Fuel Type:</label>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={selectAll}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                allSelected
+                  ? 'text-white border-transparent bg-orange-500'
+                  : 'bg-white text-gray-500 border-gray-300 hover:border-gray-400'
+              }`}
+            >
+              All Fuels
+            </button>
+            {FUEL_TYPES.map((ft) => {
+              const active = selectedFuels.has(ft)
+              return (
+                <button
+                  key={ft}
+                  onClick={() => toggleFuel(ft)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                    active
+                      ? 'text-white border-transparent'
+                      : 'bg-white text-gray-500 border-gray-300 hover:border-gray-400'
+                  }`}
+                  style={active ? { backgroundColor: FUEL_COLORS[ft] } : undefined}
+                >
+                  {FUEL_LABELS[ft]}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
       <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
         <div className="flex items-start gap-3">
           <span className="text-2xl">⚠️</span>
@@ -83,7 +139,7 @@ export function OutageList() {
               {stations.length} {stations.length === 1 ? 'station' : 'stations'} reporting fuel outages
             </h2>
             <p className="text-sm text-orange-600 mt-1">
-              {outageRecords.length} fuel {outageRecords.length === 1 ? 'type' : 'types'} affected across all stations
+              {filteredRecords.length} fuel {filteredRecords.length === 1 ? 'type' : 'types'} affected across all stations
             </p>
           </div>
         </div>

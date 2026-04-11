@@ -7,6 +7,7 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'map', label: 'Map', icon: '🗺️' },
   { id: 'table', label: 'Stations', icon: '📋' },
   { id: 'outages', label: 'Outages', icon: '⚠️' },
+  { id: 'outageTrends', label: 'Outage Trends', icon: '📉' },
 ]
 
 export function TabNav() {

@@ -8,6 +8,7 @@ import { TrendChart } from './components/trends/TrendChart'
 import { FuelMap } from './components/map/FuelMap'
 import { StationTable } from './components/table/StationTable'
 import { OutageList } from './components/outages/OutageList'
+import { OutageTrendChart } from './components/outages/OutageTrendChart'
 
 function App() {
   const loading = useFuelStore((s) => s.loading)
@@ -71,6 +72,7 @@ function App() {
         {activeTab === 'map' && <FuelMap />}
         {activeTab === 'table' && <StationTable />}
         {activeTab === 'outages' && <OutageList />}
+        {activeTab === 'outageTrends' && <OutageTrendChart />}
       </main>
     </div>
   )

@@ -79,4 +79,4 @@ export const FUEL_COLORS: Record<FuelType, string> = {
   LPG: '#db2777',
 }
 
-export type Tab = 'dashboard' | 'trends' | 'map' | 'table' | 'outages'
+export type Tab = 'dashboard' | 'trends' | 'map' | 'table' | 'outages' | 'outageTrends'

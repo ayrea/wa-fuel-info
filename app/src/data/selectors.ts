@@ -149,3 +149,29 @@ export function getOutageSummary(records: FuelRecord[]): OutageSummary {
     recordCount: outages.length,
   }
 }
+
+export interface OutageTrendPoint {
+  date: string
+  count: number
+}
+
+export function getOutageTrends(
+  records: FuelRecord[],
+  fuelTypes: FuelType[]
+): Record<string, OutageTrendPoint[]> {
+  const dates = getDates(records)
+  const result: Record<string, OutageTrendPoint[]> = {}
+
+  for (const ft of fuelTypes) {
+    result[ft] = dates.map((date) => {
+      const stationIds = new Set(
+        records
+          .filter((r) => r.date === date && r.fuelType === ft && r.tempUnavailable)
+          .map((r) => r.stationId)
+      )
+      return { date, count: stationIds.size }
+    })
+  }
+
+  return result
+}
