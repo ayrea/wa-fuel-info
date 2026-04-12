@@ -314,55 +314,6 @@
       "fuel": "ULP",
       "hash": "48d79f89c732",
       "size": 284826
-    },
-    {
-      "name": "2026-04-12_98R.json",
-      "date": "2026-04-12",
-      "fuel": "98R",
-      "hash": "722ebdc87cb5",
-      "size": 284837
-    },
-    {
-      "name": "2026-04-12_BDL.json",
-      "date": "2026-04-12",
-      "fuel": "BDL",
-      "hash": "4c6573e61c7b",
-      "size": 284837
-    },
-    {
-      "name": "2026-04-12_DSL.json",
-      "date": "2026-04-12",
-      "fuel": "DSL",
-      "hash": "89c94423e0c7",
-      "size": 284837
-    },
-    {
-      "name": "2026-04-12_E85.json",
-      "date": "2026-04-12",
-      "fuel": "E85",
-      "hash": "3e7d22f16249",
-      "size": 284837
-    },
-    {
-      "name": "2026-04-12_LPG.json",
-      "date": "2026-04-12",
-      "fuel": "LPG",
-      "hash": "0f2d18da34a5",
-      "size": 284837
-    },
-    {
-      "name": "2026-04-12_PUP.json",
-      "date": "2026-04-12",
-      "fuel": "PUP",
-      "hash": "4b9030f4a238",
-      "size": 284837
-    },
-    {
-      "name": "2026-04-12_ULP.json",
-      "date": "2026-04-12",
-      "fuel": "ULP",
-      "hash": "3e65aed3abc2",
-      "size": 284837
     }
   ]
 }
