@@ -1,8 +1,6 @@
 import { useMemo } from 'react'
 import { useFuelStore } from '../../data/store'
 import { getLatestDate } from '../../data/selectors'
-import { ExcelExport } from '../export/ExcelExport'
-import { KmlExport } from '../export/KmlExport'
 
 export function Header() {
   const records = useFuelStore((s) => s.records)
@@ -17,10 +15,6 @@ export function Header() {
             Western Australia Fuel Price Information
             {latestDate && <span className="ml-2">— Data up to {latestDate}</span>}
           </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <ExcelExport />
-          <KmlExport />
         </div>
       </div>
     </header>

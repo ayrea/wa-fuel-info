@@ -1,17 +1,84 @@
 /**
  * FuelWatch Data Fetcher
  *
- * Fetches current fuel price data from the FuelWatch WA website API
- * and saves it as JSON files matching the existing naming convention.
+ * Fetches current fuel price data from the FuelWatch WA website API,
+ * normalizes it to FuelRecord format, and saves as JSON files.
+ * Also generates a manifest.json for smart client-side loading
+ * and cleans up data older than 30 days.
  *
  * Usage:
  *   npx tsx scripts/fetch-fuelwatch.ts
- *
- * Schedule via Windows Task Scheduler to run daily for historical data collection.
  */
 
-import { writeFileSync, mkdirSync, existsSync } from 'fs'
+import { writeFileSync, mkdirSync, existsSync, readdirSync, unlinkSync, readFileSync } from 'fs'
 import { join } from 'path'
+import { createHash } from 'crypto'
+
+interface RawAddress {
+  id: number
+  line1: string
+  location: string
+  postCode: number
+  state: string
+  latitude: number
+  longitude: number
+}
+
+interface RawProduct {
+  shortName: string
+  isTruckStop: boolean
+  priceToday?: number
+  priceTomorrow?: number
+  isTwoPrice: boolean
+  tempUnavailableFrom?: string
+  tempUnavailableTo?: string
+}
+
+interface RawStation {
+  id: number
+  siteName: string
+  address: RawAddress
+  product: RawProduct
+  productFuelType: string
+  brandName: string
+  isClosedNow: boolean
+  isClosedAllDayTomorrow: boolean
+  drivewayService: string
+  manned: boolean
+  operates247: boolean
+  membershipRequired: boolean
+  currentPricingOrder: number
+  nextPricingOrder: number
+}
+
+interface FuelRecord {
+  date: string
+  fuelType: string
+  stationId: number
+  siteName: string
+  brandName: string
+  address: string
+  suburb: string
+  postCode: number
+  state: string
+  latitude: number
+  longitude: number
+  priceToday: number | null
+  priceTomorrow: number | null
+  isTruckStop: boolean
+  isClosedNow: boolean
+  isClosedAllDayTomorrow: boolean
+  operates247: boolean
+  tempUnavailable: boolean
+}
+
+interface ManifestEntry {
+  name: string
+  date: string
+  fuel: string
+  hash: string
+  size: number
+}
 
 const FUEL_TYPES = [
   { code: 'ULP', id: '1' },
@@ -24,6 +91,8 @@ const FUEL_TYPES = [
 ]
 
 const BASE_URL = 'https://www.fuelwatch.wa.gov.au'
+const RETENTION_DAYS = 30
+const DATA_FILE_PATTERN = /^(\d{4}-\d{2}-\d{2})_(\w+)\.json$/
 
 function getDateString(): string {
   const now = new Date()
@@ -33,7 +102,35 @@ function getDateString(): string {
   return `${y}-${m}-${d}`
 }
 
-async function fetchFuelData(productId: string): Promise<unknown[]> {
+function normalizeStation(raw: RawStation, date: string, fuelType: string): FuelRecord {
+  const hasTemp = !!(raw.product.tempUnavailableFrom || raw.product.tempUnavailableTo)
+  return {
+    date,
+    fuelType,
+    stationId: raw.id,
+    siteName: raw.siteName,
+    brandName: raw.brandName,
+    address: raw.address.line1,
+    suburb: raw.address.location,
+    postCode: raw.address.postCode,
+    state: raw.address.state,
+    latitude: raw.address.latitude,
+    longitude: raw.address.longitude,
+    priceToday: raw.product.priceToday ?? null,
+    priceTomorrow: raw.product.priceTomorrow ?? null,
+    isTruckStop: raw.product.isTruckStop,
+    isClosedNow: raw.isClosedNow,
+    isClosedAllDayTomorrow: raw.isClosedAllDayTomorrow,
+    operates247: raw.operates247,
+    tempUnavailable: hasTemp,
+  }
+}
+
+function sha256Short(content: string): string {
+  return createHash('sha256').update(content).digest('hex').slice(0, 12)
+}
+
+async function fetchFuelData(productId: string): Promise<RawStation[]> {
   const url = `${BASE_URL}/api/sites?productId=${productId}`
   const resp = await fetch(url, {
     headers: {
@@ -46,7 +143,50 @@ async function fetchFuelData(productId: string): Promise<unknown[]> {
     throw new Error(`HTTP ${resp.status} for product ${productId}`)
   }
 
-  return resp.json()
+  return resp.json() as Promise<RawStation[]>
+}
+
+function cleanOldData(outputDir: string): void {
+  const cutoff = new Date()
+  cutoff.setDate(cutoff.getDate() - RETENTION_DAYS)
+  const cutoffStr = cutoff.toISOString().slice(0, 10)
+
+  const files = readdirSync(outputDir).filter((f) => DATA_FILE_PATTERN.test(f))
+  let removed = 0
+
+  for (const file of files) {
+    const match = file.match(DATA_FILE_PATTERN)
+    if (match && match[1] < cutoffStr) {
+      unlinkSync(join(outputDir, file))
+      removed++
+    }
+  }
+
+  if (removed > 0) {
+    console.log(`  Cleaned up ${removed} files older than ${cutoffStr}`)
+  }
+}
+
+function generateManifest(outputDir: string): void {
+  const files = readdirSync(outputDir)
+    .filter((f) => DATA_FILE_PATTERN.test(f))
+    .sort()
+
+  const entries: ManifestEntry[] = files.map((name) => {
+    const match = name.match(DATA_FILE_PATTERN)!
+    const content = readFileSync(join(outputDir, name), 'utf-8')
+    return {
+      name,
+      date: match[1],
+      fuel: match[2],
+      hash: sha256Short(content),
+      size: content.length,
+    }
+  })
+
+  const manifestPath = join(outputDir, 'manifest.json')
+  writeFileSync(manifestPath, JSON.stringify({ files: entries }, null, 2))
+  console.log(`  Generated manifest.json (${entries.length} files indexed)`)
 }
 
 async function main() {
@@ -65,20 +205,24 @@ async function main() {
 
     try {
       console.log(`  Fetching ${fuel.code} (product ${fuel.id})...`)
-      const data = await fetchFuelData(fuel.id)
-      writeFileSync(filepath, JSON.stringify(data, null, 0))
-      console.log(`  Saved ${filepath} (${Array.isArray(data) ? data.length : '?'} stations)`)
+      const rawData = await fetchFuelData(fuel.id)
+      const normalized = rawData.map((s) => normalizeStation(s, date, fuel.code))
+      writeFileSync(filepath, JSON.stringify(normalized, null, 0))
+      console.log(`  Saved ${filename} (${normalized.length} stations, normalized)`)
     } catch (err) {
       console.error(`  Failed to fetch ${fuel.code}: ${err}`)
     }
 
-    // Small delay between requests
     await new Promise((r) => setTimeout(r, 1000))
   }
 
-  console.log('Done!')
-  console.log(`\nNote: After fetching new data, update the file list in src/data/loader.ts`)
-  console.log('to include the new date, or modify the loader to auto-discover files.')
+  console.log('\nCleaning up old data...')
+  cleanOldData(outputDir)
+
+  console.log('\nGenerating manifest...')
+  generateManifest(outputDir)
+
+  console.log('\nDone!')
 }
 
 main().catch(console.error)

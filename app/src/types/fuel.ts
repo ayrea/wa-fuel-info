@@ -79,4 +79,16 @@ export const FUEL_COLORS: Record<FuelType, string> = {
   LPG: '#db2777',
 }
 
+export interface ManifestEntry {
+  name: string
+  date: string
+  fuel: string
+  hash: string
+  size: number
+}
+
+export interface DataManifest {
+  files: ManifestEntry[]
+}
+
 export type Tab = 'dashboard' | 'trends' | 'map' | 'table' | 'outages' | 'outageTrends'

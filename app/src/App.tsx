@@ -27,7 +27,7 @@ function App() {
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="mt-4 text-gray-600 text-lg">Loading fuel data...</p>
-          <p className="text-gray-400 text-sm mt-1">Fetching 45 data files</p>
+          <p className="text-gray-400 text-sm mt-1">Checking cache and fetching new data</p>
         </div>
       </div>
     )
