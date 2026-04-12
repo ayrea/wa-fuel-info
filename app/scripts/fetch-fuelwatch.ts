@@ -80,15 +80,7 @@ interface ManifestEntry {
   size: number
 }
 
-const FUEL_TYPES = [
-  { code: 'ULP', id: '1' },
-  { code: 'PUP', id: '2' },
-  { code: '98R', id: '4' },
-  { code: 'DSL', id: '5' },
-  { code: 'BDL', id: '11' },
-  { code: 'E85', id: '10' },
-  { code: 'LPG', id: '6' },
-]
+const FUEL_TYPES = ['ULP', 'PUP', '98R', 'DSL', 'BDL', 'E85', 'LPG']
 
 const BASE_URL = 'https://www.fuelwatch.wa.gov.au'
 const RETENTION_DAYS = 30
@@ -130,8 +122,8 @@ function sha256Short(content: string): string {
   return createHash('sha256').update(content).digest('hex').slice(0, 12)
 }
 
-async function fetchFuelData(productId: string): Promise<RawStation[]> {
-  const url = `${BASE_URL}/api/sites?productId=${productId}`
+async function fetchFuelData(fuelCode: string): Promise<RawStation[]> {
+  const url = `${BASE_URL}/api/sites?fuelType=${fuelCode}`
   const resp = await fetch(url, {
     headers: {
       Accept: 'application/json',
@@ -140,7 +132,7 @@ async function fetchFuelData(productId: string): Promise<RawStation[]> {
   })
 
   if (!resp.ok) {
-    throw new Error(`HTTP ${resp.status} for product ${productId}`)
+    throw new Error(`HTTP ${resp.status} for ${fuelCode}`)
   }
 
   return resp.json() as Promise<RawStation[]>
@@ -199,18 +191,30 @@ async function main() {
 
   console.log(`Fetching FuelWatch data for ${date}...`)
 
+  const seenHashes = new Map<string, string>()
+
   for (const fuel of FUEL_TYPES) {
-    const filename = `${date}_${fuel.code}.json`
+    const filename = `${date}_${fuel}.json`
     const filepath = join(outputDir, filename)
 
     try {
-      console.log(`  Fetching ${fuel.code} (product ${fuel.id})...`)
-      const rawData = await fetchFuelData(fuel.id)
-      const normalized = rawData.map((s) => normalizeStation(s, date, fuel.code))
+      console.log(`  Fetching ${fuel}...`)
+      const rawData = await fetchFuelData(fuel)
+
+      const rawHash = sha256Short(JSON.stringify(rawData))
+      if (seenHashes.has(rawHash)) {
+        console.warn(
+          `  SKIP ${fuel}: identical response to ${seenHashes.get(rawHash)}, API may be returning stale data`
+        )
+        continue
+      }
+      seenHashes.set(rawHash, fuel)
+
+      const normalized = rawData.map((s) => normalizeStation(s, date, fuel))
       writeFileSync(filepath, JSON.stringify(normalized, null, 0))
       console.log(`  Saved ${filename} (${normalized.length} stations, normalized)`)
     } catch (err) {
-      console.error(`  Failed to fetch ${fuel.code}: ${err}`)
+      console.error(`  Failed to fetch ${fuel}: ${err}`)
     }
 
     await new Promise((r) => setTimeout(r, 1000))
