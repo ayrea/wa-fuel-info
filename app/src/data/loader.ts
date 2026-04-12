@@ -42,7 +42,7 @@ export async function loadAllData(): Promise<FuelRecord[]> {
   const fetches = files.map(async (filename: string) => {
     const { date, fuelType } = parseFilename(filename)
     try {
-      const resp = await fetch(`/data/${filename}`)
+      const resp = await fetch(`${import.meta.env.BASE_URL}data/${filename}`)
       if (!resp.ok) return []
       const rawStations: RawStation[] = await resp.json()
       return rawStations.map((s) => normalizeStation(s, date, fuelType))
