@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useFuelStore } from './data/store'
 import { Header } from './components/layout/Header'
+import { Footer } from './components/layout/Footer'
 import { TabNav } from './components/layout/TabNav'
 import { SummaryCards } from './components/dashboard/SummaryCards'
 import { PriceBarChart } from './components/dashboard/PriceBarChart'
@@ -74,6 +75,7 @@ function App() {
         {activeTab === 'outages' && <OutageList />}
         {activeTab === 'outageTrends' && <OutageTrendChart />}
       </main>
+      <Footer />
     </div>
   )
 }
