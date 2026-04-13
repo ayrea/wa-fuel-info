@@ -1,20 +1,11 @@
 import { useEffect } from 'react'
+import { RouterProvider } from 'react-router'
 import { useFuelStore } from './data/store'
-import { Header } from './components/layout/Header'
-import { Footer } from './components/layout/Footer'
-import { TabNav } from './components/layout/TabNav'
-import { SummaryCards } from './components/dashboard/SummaryCards'
-import { PriceBarChart } from './components/dashboard/PriceBarChart'
-import { TrendChart } from './components/trends/TrendChart'
-import { FuelMap } from './components/map/FuelMap'
-import { StationTable } from './components/table/StationTable'
-import { OutageList } from './components/outages/OutageList'
-import { OutageTrendChart } from './components/outages/OutageTrendChart'
+import { router } from './router'
 
 function App() {
   const loading = useFuelStore((s) => s.loading)
   const error = useFuelStore((s) => s.error)
-  const activeTab = useFuelStore((s) => s.activeTab)
   const loadData = useFuelStore((s) => s.loadData)
   const records = useFuelStore((s) => s.records)
 
@@ -58,26 +49,7 @@ function App() {
     )
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <TabNav />
-      <main className="max-w-7xl mx-auto px-4 py-6">
-        {activeTab === 'dashboard' && (
-          <div className="space-y-6">
-            <SummaryCards />
-            <PriceBarChart />
-          </div>
-        )}
-        {activeTab === 'trends' && <TrendChart />}
-        {activeTab === 'map' && <FuelMap />}
-        {activeTab === 'table' && <StationTable />}
-        {activeTab === 'outages' && <OutageList />}
-        {activeTab === 'outageTrends' && <OutageTrendChart />}
-      </main>
-      <Footer />
-    </div>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App

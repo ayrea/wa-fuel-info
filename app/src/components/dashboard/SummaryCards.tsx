@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Link } from 'react-router'
 import { useFuelStore } from '../../data/store'
 import { FUEL_LABELS } from '../../types/fuel'
 import {
@@ -11,10 +12,10 @@ import {
   getOutageSummary,
 } from '../../data/selectors'
 import { formatDateDdMm } from '../../data/date'
+import { TAB_ROUTE_PATH } from '../../routePaths'
 
 export function SummaryCards() {
   const records = useFuelStore((s) => s.records)
-  const setActiveTab = useFuelStore((s) => s.setActiveTab)
 
   const totalStations = useMemo(() => getTotalStations(records), [records])
   const dates = useMemo(() => getDates(records), [records])
@@ -67,9 +68,9 @@ export function SummaryCards() {
             <p className="text-sm text-red-600 mt-1">{expensiveULP.siteName}</p>
             <p className="text-xs text-red-500">{expensiveULP.suburb}</p>
           </div>
-          <button
-            onClick={() => setActiveTab('outages')}
-            className="bg-orange-50 border border-orange-200 rounded-xl p-5 text-left hover:bg-orange-100 transition-colors cursor-pointer"
+          <Link
+            to={TAB_ROUTE_PATH.outages}
+            className="bg-orange-50 border border-orange-200 rounded-xl p-5 text-left hover:bg-orange-100 transition-colors cursor-pointer block"
           >
             <p className="text-sm font-medium text-orange-800">Fuel Outages</p>
             <p className="text-2xl font-bold text-orange-700 mt-1">
@@ -79,7 +80,7 @@ export function SummaryCards() {
               {outageSummary.recordCount} fuel {outageSummary.recordCount === 1 ? 'type' : 'types'} affected
             </p>
             <p className="text-xs text-orange-500 mt-1">Click to view details →</p>
-          </button>
+          </Link>
         </div>
       )}
 

@@ -91,4 +91,4 @@ export interface DataManifest {
   files: ManifestEntry[]
 }
 
-export type Tab = 'dashboard' | 'trends' | 'map' | 'table' | 'outages' | 'outageTrends'
+export type Tab = 'dashboard' | 'trends' | 'map' | 'stations' | 'outages' | 'outageTrends'

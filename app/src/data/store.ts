@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { FuelRecord, FuelType, Tab } from '../types/fuel'
+import type { FuelRecord, FuelType } from '../types/fuel'
 import { FUEL_TYPES } from '../types/fuel'
 import { loadAllData } from './loader'
 
@@ -7,12 +7,10 @@ interface FuelStore {
   records: FuelRecord[]
   loading: boolean
   error: string | null
-  activeTab: Tab
 
   selectedFuelTypes: FuelType[]
   searchQuery: string
 
-  setActiveTab: (tab: Tab) => void
   toggleFuelType: (ft: FuelType) => void
   setSelectedFuelTypes: (fts: FuelType[]) => void
   setSearchQuery: (q: string) => void
@@ -23,12 +21,9 @@ export const useFuelStore = create<FuelStore>((set, get) => ({
   records: [],
   loading: false,
   error: null,
-  activeTab: 'dashboard',
 
   selectedFuelTypes: [...FUEL_TYPES],
   searchQuery: '',
-
-  setActiveTab: (tab) => set({ activeTab: tab }),
 
   toggleFuelType: (ft) => {
     const current = get().selectedFuelTypes
