@@ -1,9 +1,10 @@
-import { useState, useMemo, useEffect, useRef } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import { useFuelStore } from '../../data/store'
-import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
-import type { FuelType, FuelRecord } from '../../types/fuel'
+import { FUEL_TYPES, FUEL_LABELS } from '../../types/fuel'
+import type { FuelRecord } from '../../types/fuel'
 import { getLatestRecords } from '../../data/selectors'
+import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
 
 function priceColor(price: number | null, min: number, max: number): string {
   if (price === null) return '#9ca3af'
@@ -32,13 +33,20 @@ function MapAutoFit({ records }: { records: FuelRecord[] }) {
 }
 
 export function FuelMap() {
-  const [fuelType, setFuelType] = useState<FuelType>('ULP')
   const records = useFuelStore((s) => s.records)
+  const selectedFuelTypes = useFuelStore((s) => s.selectedFuelTypes)
 
-  const latestRecords = useMemo(
-    () => getLatestRecords(records, fuelType),
-    [records, fuelType]
-  )
+  const allSelected = selectedFuelTypes.length === FUEL_TYPES.length
+
+  const latestRecords = useMemo(() => {
+    const base = getLatestRecords(records)
+    if (allSelected) return base
+    return base.filter((r) => selectedFuelTypes.includes(r.fuelType))
+  }, [records, allSelected, selectedFuelTypes])
+
+  const fuelTypeLabelSummary = allSelected
+    ? 'all fuels'
+    : selectedFuelTypes.map((ft) => FUEL_LABELS[ft]).join(', ')
 
   const { minPrice, maxPrice, prices } = useMemo(() => {
     const p = latestRecords.filter((r) => r.priceToday !== null).map((r) => r.priceToday!)
@@ -52,25 +60,9 @@ export function FuelMap() {
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-        <div className="flex flex-wrap items-center gap-4">
-          <label className="text-sm font-medium text-gray-700">Fuel Type:</label>
-          <div className="flex flex-wrap gap-2">
-            {FUEL_TYPES.map((ft) => (
-              <button
-                key={ft}
-                onClick={() => setFuelType(ft)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                  fuelType === ft
-                    ? 'text-white border-transparent'
-                    : 'bg-white text-gray-500 border-gray-300 hover:border-gray-400'
-                }`}
-                style={fuelType === ft ? { backgroundColor: FUEL_COLORS[ft] } : undefined}
-              >
-                {FUEL_LABELS[ft]}
-              </button>
-            ))}
-          </div>
-          <div className="ml-auto flex items-center gap-3 text-xs text-gray-500">
+        <div className="flex flex-wrap items-center gap-4 justify-between">
+          <FuelTypeFilterBar />
+          <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
             <span className="flex items-center gap-1">
               <span className="w-3 h-3 rounded-full bg-green-500 inline-block" /> Cheap
             </span>
@@ -113,6 +105,7 @@ export function FuelMap() {
                   <p className="font-bold text-gray-900">{r.siteName}</p>
                   <p className="text-gray-600">{r.address}, {r.suburb}</p>
                   <p className="text-gray-500 text-xs">{r.brandName}</p>
+                  <p className="text-xs font-medium text-gray-700 mt-1">{FUEL_LABELS[r.fuelType]}</p>
                   <div className="mt-2 space-y-1">
                     {r.priceToday !== null ? (
                       <p className="font-semibold text-lg">
@@ -145,8 +138,8 @@ export function FuelMap() {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
         <p className="text-sm text-gray-500">
-          Showing <span className="font-medium text-gray-700">{latestRecords.length}</span> stations
-          for {FUEL_LABELS[fuelType]}.
+          Showing <span className="font-medium text-gray-700">{latestRecords.length}</span> fuel
+          {latestRecords.length === 1 ? ' price' : ' prices'} for {fuelTypeLabelSummary}.
           {prices.length > 0 && (
             <span>
               {' '}Price range: <span className="text-green-600 font-medium">{minPrice.toFixed(1)}</span>

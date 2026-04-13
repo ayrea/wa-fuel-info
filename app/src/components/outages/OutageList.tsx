@@ -1,9 +1,10 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import { useFuelStore } from '../../data/store'
 import { getOutages } from '../../data/selectors'
 import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
 import type { FuelRecord, FuelType } from '../../types/fuel'
+import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
 
 interface StationOutage {
   stationId: number
@@ -56,29 +57,18 @@ function groupByStation(records: FuelRecord[]): StationOutage[] {
 }
 
 export function OutageList() {
-  const [selectedFuels, setSelectedFuels] = useState<Set<FuelType>>(() => new Set(FUEL_TYPES))
   const records = useFuelStore((s) => s.records)
+  const selectedFuelTypes = useFuelStore((s) => s.selectedFuelTypes)
 
-  const allSelected = selectedFuels.size === FUEL_TYPES.length
-
-  const toggleFuel = (ft: FuelType) => {
-    setSelectedFuels((prev) => {
-      const next = new Set(prev)
-      if (next.has(ft)) {
-        if (next.size > 1) next.delete(ft)
-      } else {
-        next.add(ft)
-      }
-      return next
-    })
-  }
-
-  const selectAll = () => setSelectedFuels(new Set(FUEL_TYPES))
+  const allSelected = selectedFuelTypes.length === FUEL_TYPES.length
 
   const allOutageRecords = useMemo(() => getOutages(records), [records])
   const filteredRecords = useMemo(
-    () => allSelected ? allOutageRecords : allOutageRecords.filter((r) => selectedFuels.has(r.fuelType)),
-    [allOutageRecords, selectedFuels, allSelected]
+    () =>
+      allSelected
+        ? allOutageRecords
+        : allOutageRecords.filter((r) => selectedFuelTypes.includes(r.fuelType)),
+    [allOutageRecords, selectedFuelTypes, allSelected]
   )
   const stations = useMemo(() => groupByStation(filteredRecords), [filteredRecords])
 
@@ -97,38 +87,7 @@ export function OutageList() {
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-        <div className="flex flex-wrap items-center gap-4">
-          <label className="text-sm font-medium text-gray-700">Fuel Type:</label>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={selectAll}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                allSelected
-                  ? 'text-white border-transparent bg-orange-500'
-                  : 'bg-white text-gray-500 border-gray-300 hover:border-gray-400'
-              }`}
-            >
-              All Fuels
-            </button>
-            {FUEL_TYPES.map((ft) => {
-              const active = selectedFuels.has(ft)
-              return (
-                <button
-                  key={ft}
-                  onClick={() => toggleFuel(ft)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                    active
-                      ? 'text-white border-transparent'
-                      : 'bg-white text-gray-500 border-gray-300 hover:border-gray-400'
-                  }`}
-                  style={active ? { backgroundColor: FUEL_COLORS[ft] } : undefined}
-                >
-                  {FUEL_LABELS[ft]}
-                </button>
-              )
-            })}
-          </div>
-        </div>
+        <FuelTypeFilterBar />
       </div>
 
       <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">

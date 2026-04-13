@@ -12,7 +12,7 @@ import {
 import { useFuelStore } from '../../data/store'
 import { FUEL_COLORS, FUEL_LABELS } from '../../types/fuel'
 import type { FuelType } from '../../types/fuel'
-import { TrendFilters } from '../trends/TrendFilters'
+import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
 import { getDates, getOutageTrends } from '../../data/selectors'
 
 export function OutageTrendChart() {
@@ -42,15 +42,14 @@ export function OutageTrendChart() {
 
   return (
     <div className="space-y-4">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <FuelTypeFilterBar />
+      </div>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900">
-            Daily Fuel Outages by Type (Stations Without Fuel)
-          </h3>
-        </div>
-        <TrendFilters />
-        <div className="mt-4">
-          <ResponsiveContainer width="100%" height={400}>
+        <h3 className="font-semibold text-gray-900 mb-4">
+          Daily Fuel Outages by Type (Stations Without Fuel)
+        </h3>
+        <ResponsiveContainer width="100%" height={400}>
             <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="date" tick={{ fontSize: 12 }} />
@@ -92,7 +91,6 @@ export function OutageTrendChart() {
               ))}
             </LineChart>
           </ResponsiveContainer>
-        </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
