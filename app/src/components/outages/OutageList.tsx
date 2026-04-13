@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import { useFuelStore } from '../../data/store'
 import { getOutages } from '../../data/selectors'
@@ -19,8 +19,9 @@ interface StationOutage {
 
 function OutageMapFit({ stations }: { stations: StationOutage[] }) {
   const map = useMap()
+  const hasFitted = useRef(false)
   useEffect(() => {
-    if (stations.length === 0) return
+    if (hasFitted.current || stations.length === 0) return
     const lats = stations.map((s) => s.latitude)
     const lngs = stations.map((s) => s.longitude)
     const bounds: [[number, number], [number, number]] = [
@@ -28,6 +29,7 @@ function OutageMapFit({ stations }: { stations: StationOutage[] }) {
       [Math.max(...lats), Math.max(...lngs)],
     ]
     map.fitBounds(bounds, { padding: [30, 30] })
+    hasFitted.current = true
   }, [stations, map])
   return null
 }
