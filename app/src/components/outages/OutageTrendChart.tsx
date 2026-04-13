@@ -14,6 +14,7 @@ import { FUEL_COLORS, FUEL_LABELS } from '../../types/fuel'
 import type { FuelType } from '../../types/fuel'
 import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
 import { getDates, getOutageTrends } from '../../data/selectors'
+import { formatDateDdMm } from '../../data/date'
 
 export function OutageTrendChart() {
   const records = useFuelStore((s) => s.records)
@@ -28,7 +29,7 @@ export function OutageTrendChart() {
   const chartData = useMemo(
     () =>
       dates.map((date) => {
-        const point: Record<string, string | number> = { date: date.slice(5) }
+        const point: Record<string, string | number> = { date: formatDateDdMm(date) }
         for (const ft of selectedFuelTypes) {
           const match = outageTrends[ft]?.find((t) => t.date === date)
           if (match) {

@@ -10,6 +10,7 @@ import {
   getMostExpensive,
   getOutageSummary,
 } from '../../data/selectors'
+import { formatDateDdMm } from '../../data/date'
 
 export function SummaryCards() {
   const records = useFuelStore((s) => s.records)
@@ -22,11 +23,17 @@ export function SummaryCards() {
   const cheapestULP = useMemo(() => getCheapest(records, 'ULP'), [records])
   const expensiveULP = useMemo(() => getMostExpensive(records, 'ULP'), [records])
   const outageSummary = useMemo(() => getOutageSummary(records), [records])
+  const firstDate = dates[0]
+  const lastDate = dates[dates.length - 1]
+  const dateRangeLabel =
+    firstDate && lastDate
+      ? `${formatDateDdMm(firstDate)} to ${formatDateDdMm(lastDate)}`
+      : 'No date range'
 
   const cards = [
     { label: 'Total Stations', value: totalStations.toLocaleString(), sub: 'Unique sites' },
     { label: 'Fuel Types', value: summaries.length.toString(), sub: 'With pricing data' },
-    { label: 'Days of Data', value: dates.length.toString(), sub: `${dates[0]} to ${dates[dates.length - 1]}` },
+    { label: 'Days of Data', value: dates.length.toString(), sub: dateRangeLabel },
     { label: 'Brands', value: brands.length.toString(), sub: 'Across WA' },
   ]
 
