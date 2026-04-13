@@ -363,6 +363,55 @@
       "fuel": "ULP",
       "hash": "b6e81abe2d03",
       "size": 284728
+    },
+    {
+      "name": "2026-04-13_98R.json",
+      "date": "2026-04-13",
+      "fuel": "98R",
+      "hash": "ce5ee2b22276",
+      "size": 252014
+    },
+    {
+      "name": "2026-04-13_BDL.json",
+      "date": "2026-04-13",
+      "fuel": "BDL",
+      "hash": "c418abaa04b3",
+      "size": 172663
+    },
+    {
+      "name": "2026-04-13_DSL.json",
+      "date": "2026-04-13",
+      "fuel": "DSL",
+      "hash": "d538da71c0c3",
+      "size": 178119
+    },
+    {
+      "name": "2026-04-13_E85.json",
+      "date": "2026-04-13",
+      "fuel": "E85",
+      "hash": "9d9225b06ed0",
+      "size": 5061
+    },
+    {
+      "name": "2026-04-13_LPG.json",
+      "date": "2026-04-13",
+      "fuel": "LPG",
+      "hash": "c713a257eceb",
+      "size": 15823
+    },
+    {
+      "name": "2026-04-13_PUP.json",
+      "date": "2026-04-13",
+      "fuel": "PUP",
+      "hash": "41a1ea4682e4",
+      "size": 194378
+    },
+    {
+      "name": "2026-04-13_ULP.json",
+      "date": "2026-04-13",
+      "fuel": "ULP",
+      "hash": "92c0642c8361",
+      "size": 284853
     }
   ]
 }
