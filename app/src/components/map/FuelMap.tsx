@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
 import { useFuelStore } from '../../data/store'
-import { FUEL_TYPES, FUEL_LABELS } from '../../types/fuel'
+import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
 import type { FuelRecord } from '../../types/fuel'
 import { getLatestRecords } from '../../data/selectors'
 import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
@@ -43,6 +43,19 @@ export function FuelMap() {
     if (allSelected) return base
     return base.filter((r) => selectedFuelTypes.includes(r.fuelType))
   }, [records, allSelected, selectedFuelTypes])
+
+  const recordsByStation = useMemo(() => {
+    const m = new Map<number, FuelRecord[]>()
+    for (const rec of latestRecords) {
+      const list = m.get(rec.stationId)
+      if (list) list.push(rec)
+      else m.set(rec.stationId, [rec])
+    }
+    for (const list of m.values()) {
+      list.sort((a, b) => FUEL_TYPES.indexOf(a.fuelType) - FUEL_TYPES.indexOf(b.fuelType))
+    }
+    return m
+  }, [latestRecords])
 
   const fuelTypeLabelSummary = allSelected
     ? 'all fuels'
@@ -91,51 +104,73 @@ export function FuelMap() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <MapAutoFit records={latestRecords} />
-          {latestRecords.map((r) => (
-            <CircleMarker
-              key={`${r.stationId}-${r.fuelType}`}
-              center={[r.latitude, r.longitude]}
-              radius={6}
-              pathOptions={{
-                color: priceColor(r.priceToday, minPrice, maxPrice),
-                fillColor: priceColor(r.priceToday, minPrice, maxPrice),
-                fillOpacity: 0.8,
-                weight: 1,
-              }}
-            >
-              <Popup>
-                <div className="text-sm dark:text-gray-100">
-                  <p className="font-bold text-gray-900 dark:text-gray-100">{r.siteName}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{r.address}, {r.suburb}</p>
-                  <p className="text-gray-500 dark:text-gray-500 text-xs">{r.brandName}</p>
-                  <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mt-1">{FUEL_LABELS[r.fuelType]}</p>
-                  <div className="mt-2 space-y-1">
-                    {r.priceToday !== null ? (
-                      <p className="font-semibold text-lg text-gray-900 dark:text-gray-50">
-                        {r.priceToday.toFixed(1)} ¢/L
-                      </p>
-                    ) : (
-                      <p className="text-gray-400 dark:text-gray-500 italic">Price unavailable</p>
+          {latestRecords.map((r) => {
+            const stationRows = recordsByStation.get(r.stationId) ?? [r]
+            const stationRep = stationRows[0]
+            return (
+              <CircleMarker
+                key={`${r.stationId}-${r.fuelType}`}
+                center={[r.latitude, r.longitude]}
+                radius={6}
+                pathOptions={{
+                  color: priceColor(r.priceToday, minPrice, maxPrice),
+                  fillColor: priceColor(r.priceToday, minPrice, maxPrice),
+                  fillOpacity: 0.8,
+                  weight: 1,
+                }}
+              >
+                <Popup>
+                  <div className="text-sm dark:text-gray-100">
+                    <p className="font-bold text-gray-900 dark:text-gray-100">{r.siteName}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{r.address}, {r.suburb}</p>
+                    <p className="text-gray-500 dark:text-gray-500 text-xs">{r.brandName}</p>
+                    <table className="w-full text-xs border-collapse mt-2">
+                      <thead>
+                        <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-600">
+                          <th className="py-0.5 pr-2 font-medium align-bottom">Fuel</th>
+                          <th className="py-0.5 px-1 font-medium align-bottom">Today (¢/L)</th>
+                          <th className="py-0.5 px-1 font-medium align-bottom">Tomorrow (¢/L)</th>
+                          <th className="py-0.5 pl-1 w-0 font-medium align-bottom whitespace-nowrap" aria-label="Availability" />
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                        {stationRows.map((rec) => (
+                          <tr key={rec.fuelType}>
+                            <td className="py-1 pr-2 align-middle">
+                              <span
+                                className="inline-block px-1.5 py-0.5 rounded text-[10px] font-semibold text-white leading-none"
+                                style={{ backgroundColor: FUEL_COLORS[rec.fuelType] }}
+                                title={FUEL_LABELS[rec.fuelType]}
+                              >
+                                {rec.fuelType}
+                              </span>
+                            </td>
+                            <td className="py-1 px-1 align-middle font-semibold tabular-nums text-sm text-gray-900 dark:text-gray-50">
+                              {rec.priceToday !== null ? rec.priceToday.toFixed(1) : (
+                                <span className="text-gray-400 dark:text-gray-500 font-normal italic">—</span>
+                              )}
+                            </td>
+                            <td className="py-1 px-1 align-middle tabular-nums text-gray-600 dark:text-gray-300">
+                              {rec.priceTomorrow !== null ? rec.priceTomorrow.toFixed(1) : '—'}
+                            </td>
+                            <td className="py-1 pl-1 align-middle text-orange-500 dark:text-orange-400 whitespace-nowrap font-medium">
+                              {rec.tempUnavailable ? 'Unavail' : ''}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {stationRep.isClosedNow && (
+                      <p className="text-red-500 dark:text-red-400 text-xs mt-2">Currently closed</p>
                     )}
-                    {r.priceTomorrow !== null && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Tomorrow: {r.priceTomorrow.toFixed(1)} ¢/L
-                      </p>
+                    {stationRep.operates247 && (
+                      <p className="text-green-500 dark:text-green-400 text-xs mt-1">Open 24/7</p>
                     )}
                   </div>
-                  {r.tempUnavailable && (
-                    <p className="text-orange-500 dark:text-orange-400 text-xs font-medium mt-1">⚠ Fuel unavailable</p>
-                  )}
-                  {r.isClosedNow && (
-                    <p className="text-red-500 dark:text-red-400 text-xs mt-1">Currently closed</p>
-                  )}
-                  {r.operates247 && (
-                    <p className="text-green-500 dark:text-green-400 text-xs">Open 24/7</p>
-                  )}
-                </div>
-              </Popup>
-            </CircleMarker>
-          ))}
+                </Popup>
+              </CircleMarker>
+            )
+          })}
         </MapContainer>
       </div>
 
