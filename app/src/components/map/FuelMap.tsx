@@ -59,10 +59,10 @@ export function FuelMap() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
         <div className="flex flex-wrap items-center gap-4 justify-between">
           <FuelTypeFilterBar />
-          <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
             <span className="flex items-center gap-1">
               <span className="w-3 h-3 rounded-full bg-green-500 inline-block" /> Cheap
             </span>
@@ -76,7 +76,10 @@ export function FuelMap() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" style={{ height: '600px' }}>
+      <div
+        className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
+        style={{ height: '600px' }}
+      >
         <MapContainer
           center={[-31.95, 115.86]}
           zoom={10}
@@ -101,33 +104,33 @@ export function FuelMap() {
               }}
             >
               <Popup>
-                <div className="text-sm">
-                  <p className="font-bold text-gray-900">{r.siteName}</p>
-                  <p className="text-gray-600">{r.address}, {r.suburb}</p>
-                  <p className="text-gray-500 text-xs">{r.brandName}</p>
-                  <p className="text-xs font-medium text-gray-700 mt-1">{FUEL_LABELS[r.fuelType]}</p>
+                <div className="text-sm dark:text-gray-100">
+                  <p className="font-bold text-gray-900 dark:text-gray-100">{r.siteName}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{r.address}, {r.suburb}</p>
+                  <p className="text-gray-500 dark:text-gray-500 text-xs">{r.brandName}</p>
+                  <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mt-1">{FUEL_LABELS[r.fuelType]}</p>
                   <div className="mt-2 space-y-1">
                     {r.priceToday !== null ? (
-                      <p className="font-semibold text-lg">
+                      <p className="font-semibold text-lg text-gray-900 dark:text-gray-50">
                         {r.priceToday.toFixed(1)} ¢/L
                       </p>
                     ) : (
-                      <p className="text-gray-400 italic">Price unavailable</p>
+                      <p className="text-gray-400 dark:text-gray-500 italic">Price unavailable</p>
                     )}
                     {r.priceTomorrow !== null && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Tomorrow: {r.priceTomorrow.toFixed(1)} ¢/L
                       </p>
                     )}
                   </div>
                   {r.tempUnavailable && (
-                    <p className="text-orange-500 text-xs font-medium mt-1">⚠ Fuel unavailable</p>
+                    <p className="text-orange-500 dark:text-orange-400 text-xs font-medium mt-1">⚠ Fuel unavailable</p>
                   )}
                   {r.isClosedNow && (
-                    <p className="text-red-500 text-xs mt-1">Currently closed</p>
+                    <p className="text-red-500 dark:text-red-400 text-xs mt-1">Currently closed</p>
                   )}
                   {r.operates247 && (
-                    <p className="text-green-500 text-xs">Open 24/7</p>
+                    <p className="text-green-500 dark:text-green-400 text-xs">Open 24/7</p>
                   )}
                 </div>
               </Popup>
@@ -136,15 +139,15 @@ export function FuelMap() {
         </MapContainer>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-        <p className="text-sm text-gray-500">
-          Showing <span className="font-medium text-gray-700">{latestRecords.length}</span> fuel
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Showing <span className="font-medium text-gray-700 dark:text-gray-200">{latestRecords.length}</span> fuel
           {latestRecords.length === 1 ? ' price' : ' prices'} for {fuelTypeLabelSummary}.
           {prices.length > 0 && (
             <span>
-              {' '}Price range: <span className="text-green-600 font-medium">{minPrice.toFixed(1)}</span>
+              {' '}Price range: <span className="text-green-600 dark:text-green-400 font-medium">{minPrice.toFixed(1)}</span>
               {' – '}
-              <span className="text-red-600 font-medium">{maxPrice.toFixed(1)}</span> ¢/L
+              <span className="text-red-600 dark:text-red-400 font-medium">{maxPrice.toFixed(1)}</span> ¢/L
             </span>
           )}
         </p>

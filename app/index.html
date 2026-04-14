@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WA Fuel Info</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('wa-fuel-theme')
+          if (t === 'dark') document.documentElement.classList.add('dark')
+          else if (t === 'light') document.documentElement.classList.remove('dark')
+        } catch (_) {}
+      })()
+    </script>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -11,7 +20,7 @@
       crossorigin=""
     />
   </head>
-  <body class="bg-gray-50 text-gray-900">
+  <body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

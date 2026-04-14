@@ -76,10 +76,10 @@ export function OutageList() {
 
   if (allOutageRecords.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
         <div className="text-5xl mb-4">✅</div>
-        <h2 className="text-xl font-semibold text-gray-900">All stations reporting normally</h2>
-        <p className="text-gray-500 mt-2">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">All stations reporting normally</h2>
+        <p className="text-gray-500 dark:text-gray-400 mt-2">
           No fuel outages have been reported for today.
         </p>
       </div>
@@ -88,18 +88,18 @@ export function OutageList() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
         <FuelTypeFilterBar />
       </div>
 
-      <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
+      <div className="bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-xl p-5">
         <div className="flex items-start gap-3">
           <span className="text-2xl">⚠️</span>
           <div>
-            <h2 className="text-lg font-semibold text-orange-800">
+            <h2 className="text-lg font-semibold text-orange-800 dark:text-orange-300">
               {stations.length} {stations.length === 1 ? 'station' : 'stations'} reporting fuel outages
             </h2>
-            <p className="text-sm text-orange-600 mt-1">
+            <p className="text-sm text-orange-600 dark:text-orange-400/90 mt-1">
               {filteredRecords.length} fuel {filteredRecords.length === 1 ? 'type' : 'types'} affected across all stations
             </p>
           </div>
@@ -107,7 +107,7 @@ export function OutageList() {
       </div>
 
       <div
-        className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+        className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
         style={{ height: '350px' }}
       >
         <MapContainer
@@ -134,12 +134,12 @@ export function OutageList() {
               }}
             >
               <Popup>
-                <div className="text-sm">
-                  <p className="font-bold text-gray-900">{s.siteName}</p>
-                  <p className="text-gray-600">{s.address}, {s.suburb}</p>
-                  <p className="text-gray-500 text-xs">{s.brandName}</p>
+                <div className="text-sm dark:text-gray-100">
+                  <p className="font-bold text-gray-900 dark:text-gray-100">{s.siteName}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{s.address}, {s.suburb}</p>
+                  <p className="text-gray-500 dark:text-gray-500 text-xs">{s.brandName}</p>
                   <div className="mt-2">
-                    <p className="text-xs font-medium text-orange-700">Unavailable fuels:</p>
+                    <p className="text-xs font-medium text-orange-700 dark:text-orange-400">Unavailable fuels:</p>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {s.fuelTypes.map((ft) => (
                         <span
@@ -159,18 +159,18 @@ export function OutageList() {
         </MapContainer>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100">
-          <h3 className="font-semibold text-gray-900">Affected Stations</h3>
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100">Affected Stations</h3>
         </div>
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-gray-100 dark:divide-gray-700">
           {stations.map((s) => (
-            <div key={s.stationId} className="px-5 py-4 hover:bg-gray-50">
+            <div key={s.stationId} className="px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="font-medium text-gray-900">{s.siteName}</p>
-                  <p className="text-sm text-gray-500">{s.address}, {s.suburb}</p>
-                  <span className="inline-block mt-1 px-2 py-0.5 bg-gray-100 rounded text-xs font-medium text-gray-600">
+                  <p className="font-medium text-gray-900 dark:text-gray-100">{s.siteName}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{s.address}, {s.suburb}</p>
+                  <span className="inline-block mt-1 px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs font-medium text-gray-600 dark:text-gray-300">
                     {s.brandName}
                   </span>
                 </div>

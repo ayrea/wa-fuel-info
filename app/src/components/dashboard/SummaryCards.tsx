@@ -42,74 +42,77 @@ export function SummaryCards() {
     <div className="space-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((c) => (
-          <div key={c.label} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <p className="text-sm text-gray-500 font-medium">{c.label}</p>
-            <p className="text-3xl font-bold text-gray-900 mt-1">{c.value}</p>
-            <p className="text-xs text-gray-400 mt-1">{c.sub}</p>
+          <div
+            key={c.label}
+            className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5"
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{c.label}</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-1">{c.value}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{c.sub}</p>
           </div>
         ))}
       </div>
 
       {cheapestULP && expensiveULP && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-green-50 border border-green-200 rounded-xl p-5">
-            <p className="text-sm font-medium text-green-800">Cheapest ULP Today</p>
-            <p className="text-2xl font-bold text-green-700 mt-1">
+          <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-xl p-5">
+            <p className="text-sm font-medium text-green-800 dark:text-green-300">Cheapest ULP Today</p>
+            <p className="text-2xl font-bold text-green-700 dark:text-green-400 mt-1">
               {cheapestULP.priceToday?.toFixed(1)}¢/L
             </p>
-            <p className="text-sm text-green-600 mt-1">{cheapestULP.siteName}</p>
-            <p className="text-xs text-green-500">{cheapestULP.suburb}</p>
+            <p className="text-sm text-green-600 dark:text-green-400/90 mt-1">{cheapestULP.siteName}</p>
+            <p className="text-xs text-green-500 dark:text-green-500/80">{cheapestULP.suburb}</p>
           </div>
-          <div className="bg-red-50 border border-red-200 rounded-xl p-5">
-            <p className="text-sm font-medium text-red-800">Most Expensive ULP Today</p>
-            <p className="text-2xl font-bold text-red-700 mt-1">
+          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl p-5">
+            <p className="text-sm font-medium text-red-800 dark:text-red-300">Most Expensive ULP Today</p>
+            <p className="text-2xl font-bold text-red-700 dark:text-red-400 mt-1">
               {expensiveULP.priceToday?.toFixed(1)}¢/L
             </p>
-            <p className="text-sm text-red-600 mt-1">{expensiveULP.siteName}</p>
-            <p className="text-xs text-red-500">{expensiveULP.suburb}</p>
+            <p className="text-sm text-red-600 dark:text-red-400/90 mt-1">{expensiveULP.siteName}</p>
+            <p className="text-xs text-red-500 dark:text-red-500/80">{expensiveULP.suburb}</p>
           </div>
           <Link
             to={TAB_ROUTE_PATH.outages}
-            className="bg-orange-50 border border-orange-200 rounded-xl p-5 text-left hover:bg-orange-100 transition-colors cursor-pointer block"
+            className="bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-xl p-5 text-left hover:bg-orange-100 dark:hover:bg-orange-950/60 transition-colors cursor-pointer block"
           >
-            <p className="text-sm font-medium text-orange-800">Fuel Outages</p>
-            <p className="text-2xl font-bold text-orange-700 mt-1">
+            <p className="text-sm font-medium text-orange-800 dark:text-orange-300">Fuel Outages</p>
+            <p className="text-2xl font-bold text-orange-700 dark:text-orange-400 mt-1">
               {outageSummary.stationCount} {outageSummary.stationCount === 1 ? 'station' : 'stations'}
             </p>
-            <p className="text-sm text-orange-600 mt-1">
+            <p className="text-sm text-orange-600 dark:text-orange-400/90 mt-1">
               {outageSummary.recordCount} fuel {outageSummary.recordCount === 1 ? 'type' : 'types'} affected
             </p>
-            <p className="text-xs text-orange-500 mt-1">Click to view details →</p>
+            <p className="text-xs text-orange-500 dark:text-orange-500/80 mt-1">Click to view details →</p>
           </Link>
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100">
-          <h3 className="font-semibold text-gray-900">Price Summary by Fuel Type</h3>
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100">Price Summary by Fuel Type</h3>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50">
+          <table className="w-full text-sm dark:text-gray-200">
+            <thead className="bg-gray-50 dark:bg-gray-800/80">
               <tr>
-                <th className="text-left px-5 py-3 font-medium text-gray-500">Fuel Type</th>
-                <th className="text-right px-5 py-3 font-medium text-gray-500">Avg (¢/L)</th>
-                <th className="text-right px-5 py-3 font-medium text-gray-500">Min (¢/L)</th>
-                <th className="text-right px-5 py-3 font-medium text-gray-500">Max (¢/L)</th>
-                <th className="text-right px-5 py-3 font-medium text-gray-500">Spread</th>
-                <th className="text-right px-5 py-3 font-medium text-gray-500">Stations</th>
+                <th className="text-left px-5 py-3 font-medium text-gray-500 dark:text-gray-400">Fuel Type</th>
+                <th className="text-right px-5 py-3 font-medium text-gray-500 dark:text-gray-400">Avg (¢/L)</th>
+                <th className="text-right px-5 py-3 font-medium text-gray-500 dark:text-gray-400">Min (¢/L)</th>
+                <th className="text-right px-5 py-3 font-medium text-gray-500 dark:text-gray-400">Max (¢/L)</th>
+                <th className="text-right px-5 py-3 font-medium text-gray-500 dark:text-gray-400">Spread</th>
+                <th className="text-right px-5 py-3 font-medium text-gray-500 dark:text-gray-400">Stations</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {summaries.map((s) => (
-                <tr key={s.fuelType} className="hover:bg-gray-50">
-                  <td className="px-5 py-3 font-medium text-gray-900">
+                <tr key={s.fuelType} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                  <td className="px-5 py-3 font-medium text-gray-900 dark:text-gray-100">
                     {FUEL_LABELS[s.fuelType]}
                   </td>
                   <td className="px-5 py-3 text-right">{s.avg.toFixed(1)}</td>
-                  <td className="px-5 py-3 text-right text-green-600">{s.min.toFixed(1)}</td>
-                  <td className="px-5 py-3 text-right text-red-600">{s.max.toFixed(1)}</td>
-                  <td className="px-5 py-3 text-right text-gray-500">
+                  <td className="px-5 py-3 text-right text-green-600 dark:text-green-400">{s.min.toFixed(1)}</td>
+                  <td className="px-5 py-3 text-right text-red-600 dark:text-red-400">{s.max.toFixed(1)}</td>
+                  <td className="px-5 py-3 text-right text-gray-500 dark:text-gray-400">
                     {(s.max - s.min).toFixed(1)}
                   </td>
                   <td className="px-5 py-3 text-right">{s.count}</td>
