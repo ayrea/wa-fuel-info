@@ -33,11 +33,26 @@ const perthWeekdayFormatter = new Intl.DateTimeFormat('en-AU', {
   month: 'short',
 })
 
+const perthWeekdayWithYearFormatter = new Intl.DateTimeFormat('en-AU', {
+  timeZone: 'Australia/Perth',
+  weekday: 'short',
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+})
+
 /** Weekday + date for a YYYY-MM-DD civil day as used by FuelWatch (Western Australia). */
 export function formatWeekdayShortDatePerth(dateStr: string): string {
   if (!ISO_DATE.test(dateStr)) return dateStr
   const dt = new Date(`${dateStr}T12:00:00+08:00`)
   return perthWeekdayFormatter.format(dt)
+}
+
+/** Weekday + date + four-digit year (Perth); for header “Data up to” only. */
+export function formatWeekdayShortDateWithYearPerth(dateStr: string): string {
+  if (!ISO_DATE.test(dateStr)) return dateStr
+  const dt = new Date(`${dateStr}T12:00:00+08:00`)
+  return perthWeekdayWithYearFormatter.format(dt)
 }
 
 /** Column headers for priceToday / priceTomorrow from a snapshot `date`. */

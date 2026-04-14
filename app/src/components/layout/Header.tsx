@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { useFuelStore } from '../../data/store'
 import { getLatestDate } from '../../data/selectors'
-import { formatWeekdayShortDatePerth } from '../../data/date'
+import { formatWeekdayShortDateWithYearPerth } from '../../data/date'
 import { ThemeToggle } from './ThemeToggle'
 
 export function Header() {
   const records = useFuelStore((s) => s.records)
   const latestDate = useMemo(() => getLatestDate(records), [records])
   const latestDisplayDate = useMemo(
-    () => (latestDate ? formatWeekdayShortDatePerth(latestDate) : ''),
+    () => (latestDate ? formatWeekdayShortDateWithYearPerth(latestDate) : ''),
     [latestDate]
   )
 
