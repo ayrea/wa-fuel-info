@@ -1,13 +1,16 @@
 import { useMemo } from 'react'
 import { useFuelStore } from '../../data/store'
 import { getLatestDate } from '../../data/selectors'
-import { formatDateDdMm } from '../../data/date'
+import { formatWeekdayShortDatePerth } from '../../data/date'
 import { ThemeToggle } from './ThemeToggle'
 
 export function Header() {
   const records = useFuelStore((s) => s.records)
   const latestDate = useMemo(() => getLatestDate(records), [records])
-  const latestDisplayDate = useMemo(() => formatDateDdMm(latestDate), [latestDate])
+  const latestDisplayDate = useMemo(
+    () => (latestDate ? formatWeekdayShortDatePerth(latestDate) : ''),
+    [latestDate]
+  )
 
   return (
     <header className="bg-gradient-to-r from-blue-700 to-blue-900 text-white shadow-lg dark:from-blue-800 dark:to-blue-950">

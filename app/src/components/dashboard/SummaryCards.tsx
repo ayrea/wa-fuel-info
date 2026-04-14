@@ -10,8 +10,9 @@ import {
   getCheapest,
   getMostExpensive,
   getOutageSummary,
+  getLatestDate,
 } from '../../data/selectors'
-import { formatDateDdMm } from '../../data/date'
+import { formatDateDdMm, formatWeekdayShortDatePerth } from '../../data/date'
 import { TAB_ROUTE_PATH } from '../../routePaths'
 
 export function SummaryCards() {
@@ -24,6 +25,11 @@ export function SummaryCards() {
   const cheapestULP = useMemo(() => getCheapest(records, 'ULP'), [records])
   const expensiveULP = useMemo(() => getMostExpensive(records, 'ULP'), [records])
   const outageSummary = useMemo(() => getOutageSummary(records), [records])
+  const snapshotDate = useMemo(() => getLatestDate(records), [records])
+  const snapshotDayLabel = useMemo(
+    () => (snapshotDate ? formatWeekdayShortDatePerth(snapshotDate) : ''),
+    [snapshotDate]
+  )
   const firstDate = dates[0]
   const lastDate = dates[dates.length - 1]
   const dateRangeLabel =
@@ -56,7 +62,9 @@ export function SummaryCards() {
       {cheapestULP && expensiveULP && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-xl p-5">
-            <p className="text-sm font-medium text-green-800 dark:text-green-300">Cheapest ULP Today</p>
+            <p className="text-sm font-medium text-green-800 dark:text-green-300">
+              {snapshotDayLabel ? `Cheapest ULP — ${snapshotDayLabel}` : 'Cheapest ULP'}
+            </p>
             <p className="text-2xl font-bold text-green-700 dark:text-green-400 mt-1">
               {cheapestULP.priceToday?.toFixed(1)}¢/L
             </p>
@@ -64,7 +72,9 @@ export function SummaryCards() {
             <p className="text-xs text-green-500 dark:text-green-500/80">{cheapestULP.suburb}</p>
           </div>
           <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl p-5">
-            <p className="text-sm font-medium text-red-800 dark:text-red-300">Most Expensive ULP Today</p>
+            <p className="text-sm font-medium text-red-800 dark:text-red-300">
+              {snapshotDayLabel ? `Most Expensive ULP — ${snapshotDayLabel}` : 'Most Expensive ULP'}
+            </p>
             <p className="text-2xl font-bold text-red-700 dark:text-red-400 mt-1">
               {expensiveULP.priceToday?.toFixed(1)}¢/L
             </p>
@@ -90,6 +100,11 @@ export function SummaryCards() {
       <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
           <h3 className="font-semibold text-gray-900 dark:text-gray-100">Price Summary by Fuel Type</h3>
+          {snapshotDayLabel && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Averages, min, and max use snapshot-day prices for {snapshotDayLabel}.
+            </p>
+          )}
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm dark:text-gray-200">

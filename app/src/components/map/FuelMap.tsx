@@ -3,7 +3,8 @@ import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaf
 import { useFuelStore } from '../../data/store'
 import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
 import type { FuelRecord } from '../../types/fuel'
-import { getLatestRecords } from '../../data/selectors'
+import { getLatestDate, getLatestRecords } from '../../data/selectors'
+import { fuelWatchPriceColumnLabels } from '../../data/date'
 import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
 
 function priceColor(price: number | null, min: number, max: number): string {
@@ -60,6 +61,11 @@ export function FuelMap() {
   const fuelTypeLabelSummary = allSelected
     ? 'all fuels'
     : selectedFuelTypes.map((ft) => FUEL_LABELS[ft]).join(', ')
+
+  const priceColumnLabels = useMemo(
+    () => fuelWatchPriceColumnLabels(getLatestDate(records)),
+    [records]
+  )
 
   const { minPrice, maxPrice, prices } = useMemo(() => {
     const p = latestRecords.filter((r) => r.priceToday !== null).map((r) => r.priceToday!)
@@ -128,8 +134,8 @@ export function FuelMap() {
                       <thead>
                         <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-600">
                           <th className="py-0.5 pr-2 font-medium align-bottom">Fuel</th>
-                          <th className="py-0.5 px-1 font-medium align-bottom">Today (¢/L)</th>
-                          <th className="py-0.5 px-1 font-medium align-bottom">Tomorrow (¢/L)</th>
+                          <th className="py-0.5 px-1 font-medium align-bottom">{priceColumnLabels.first}</th>
+                          <th className="py-0.5 px-1 font-medium align-bottom">{priceColumnLabels.second}</th>
                           <th className="py-0.5 pl-1 w-0 font-medium align-bottom whitespace-nowrap" aria-label="Availability" />
                         </tr>
                       </thead>

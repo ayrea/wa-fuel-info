@@ -13,6 +13,7 @@ import { useFuelStore } from '../../data/store'
 import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
 import type { FuelRecord, FuelType } from '../../types/fuel'
 import { getLatestDate, getBrands } from '../../data/selectors'
+import { fuelWatchPriceColumnLabels } from '../../data/date'
 
 const columnHelper = createColumnHelper<FuelRecord>()
 
@@ -44,6 +45,11 @@ export function StationTable() {
       return true
     })
   }, [records, latestDate, fuelFilter, brandFilter, searchQuery])
+
+  const priceColumnLabels = useMemo(
+    () => fuelWatchPriceColumnLabels(latestDate),
+    [latestDate]
+  )
 
   const columns = useMemo(
     () => [
@@ -82,7 +88,7 @@ export function StationTable() {
         },
       }),
       columnHelper.accessor('priceToday', {
-        header: 'Today (¢/L)',
+        header: priceColumnLabels.first,
         cell: (info) => {
           const v = info.getValue()
           return v !== null ? (
@@ -94,12 +100,12 @@ export function StationTable() {
         sortUndefined: 'last',
       }),
       columnHelper.accessor('priceTomorrow', {
-        header: 'Tomorrow (¢/L)',
+        header: priceColumnLabels.second,
         cell: (info) => {
           const v = info.getValue()
           if (v === null) return <span className="text-gray-400 dark:text-gray-500">—</span>
-          const today = info.row.original.priceToday
-          const diff = today !== null ? v - today : 0
+          const priceFirst = info.row.original.priceToday
+          const diff = priceFirst !== null ? v - priceFirst : 0
           return (
             <div>
               <span>{v.toFixed(1)}</span>
@@ -126,7 +132,7 @@ export function StationTable() {
         },
       }),
     ],
-    []
+    [priceColumnLabels]
   )
 
   const table = useReactTable({
