@@ -136,6 +136,10 @@ export function getOutages(records: FuelRecord[]): FuelRecord[] {
   return records.filter((r) => r.date === latest && r.tempUnavailable)
 }
 
+export function getOutagesForDate(records: FuelRecord[], date: string): FuelRecord[] {
+  return records.filter((r) => r.date === date && r.tempUnavailable)
+}
+
 export interface OutageSummary {
   stationCount: number
   recordCount: number
