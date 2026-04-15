@@ -3,7 +3,7 @@ name: Fetch FuelWatch Data
 on:
   schedule:
     # 3:00 PM AWST (UTC+8) = 7:00 AM UTC, 30 min after FuelWatch publication deadline
-    - cron: "0 7 * * *"
+    - cron: "5 7 * * *"
   workflow_dispatch:
 
 permissions:
