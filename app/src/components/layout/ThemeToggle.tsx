@@ -1,6 +1,6 @@
 import { useThemeStore } from '../../data/themeStore'
 
-export function ThemeToggle() {
+export function ThemeToggle(): React.JSX.Element {
   const theme = useThemeStore((s) => s.theme)
   const toggleTheme = useThemeStore((s) => s.toggleTheme)
   const isDark = theme === 'dark'

@@ -15,7 +15,7 @@ import {
 import { formatDateDdMm, formatWeekdayShortDatePerth } from '../../data/date'
 import { TAB_ROUTE_PATH } from '../../routePaths'
 
-export function SummaryCards() {
+export function SummaryCards(): React.JSX.Element {
   const records = useFuelStore((s) => s.records)
 
   const totalStations = useMemo(() => getTotalStations(records), [records])

@@ -1,11 +1,12 @@
-import { useMemo, useEffect, useRef } from 'react'
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
+import { useMemo } from 'react'
+import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet'
 import { useFuelStore } from '../../data/store'
 import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
 import type { FuelRecord } from '../../types/fuel'
 import { getLatestDate, getLatestRecords } from '../../data/selectors'
 import { fuelWatchPriceColumnLabels } from '../../data/date'
 import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
+import { MapAutoFit } from './MapAutoFit'
 
 function priceColor(price: number | null, min: number, max: number): string {
   if (price === null) return '#9ca3af'
@@ -16,24 +17,7 @@ function priceColor(price: number | null, min: number, max: number): string {
   return '#ef4444'
 }
 
-function MapAutoFit({ records }: { records: FuelRecord[] }) {
-  const map = useMap()
-  const hasFitted = useRef(false)
-  useEffect(() => {
-    if (hasFitted.current || records.length === 0) return
-    const lats = records.map((r) => r.latitude)
-    const lngs = records.map((r) => r.longitude)
-    const bounds: [[number, number], [number, number]] = [
-      [Math.min(...lats), Math.min(...lngs)],
-      [Math.max(...lats), Math.max(...lngs)],
-    ]
-    map.fitBounds(bounds, { padding: [30, 30] })
-    hasFitted.current = true
-  }, [records, map])
-  return null
-}
-
-export function FuelMap() {
+export function FuelMap(): React.JSX.Element {
   const records = useFuelStore((s) => s.records)
   const selectedFuelTypes = useFuelStore((s) => s.selectedFuelTypes)
 
@@ -109,7 +93,7 @@ export function FuelMap() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <MapAutoFit records={latestRecords} />
+          <MapAutoFit items={latestRecords} />
           {latestRecords.map((r) => {
             const stationRows = recordsByStation.get(r.stationId) ?? [r]
             const stationRep = stationRows[0]

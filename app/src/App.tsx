@@ -3,7 +3,7 @@ import { RouterProvider } from 'react-router'
 import { useFuelStore } from './data/store'
 import { router } from './router'
 
-function App() {
+function App(): React.JSX.Element {
   const loading = useFuelStore((s) => s.loading)
   const error = useFuelStore((s) => s.error)
   const loadData = useFuelStore((s) => s.loadData)

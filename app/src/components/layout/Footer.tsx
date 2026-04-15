@@ -1,4 +1,4 @@
-export function Footer() {
+export function Footer(): React.JSX.Element {
   return (
     <footer className="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-8">
       <div className="max-w-7xl mx-auto px-4 py-6 text-xs text-gray-500 dark:text-gray-400 space-y-2">

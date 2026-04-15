@@ -1,64 +1,12 @@
-import { useMemo, useEffect, useRef } from 'react'
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet'
+import { useMemo } from 'react'
+import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet'
 import { useFuelStore } from '../../data/store'
-import { getOutages } from '../../data/selectors'
-import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../../types/fuel'
-import type { FuelRecord, FuelType } from '../../types/fuel'
+import { getOutages, groupOutagesByStation } from '../../data/selectors'
+import { FUEL_TYPES, FUEL_COLORS } from '../../types/fuel'
 import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
+import { MapAutoFit } from '../map/MapAutoFit'
 
-interface StationOutage {
-  stationId: number
-  siteName: string
-  brandName: string
-  address: string
-  suburb: string
-  latitude: number
-  longitude: number
-  fuelTypes: FuelType[]
-}
-
-function OutageMapFit({ stations }: { stations: StationOutage[] }) {
-  const map = useMap()
-  const hasFitted = useRef(false)
-  useEffect(() => {
-    if (hasFitted.current || stations.length === 0) return
-    const lats = stations.map((s) => s.latitude)
-    const lngs = stations.map((s) => s.longitude)
-    const bounds: [[number, number], [number, number]] = [
-      [Math.min(...lats), Math.min(...lngs)],
-      [Math.max(...lats), Math.max(...lngs)],
-    ]
-    map.fitBounds(bounds, { padding: [30, 30] })
-    hasFitted.current = true
-  }, [stations, map])
-  return null
-}
-
-function groupByStation(records: FuelRecord[]): StationOutage[] {
-  const map = new Map<number, StationOutage>()
-  for (const r of records) {
-    const existing = map.get(r.stationId)
-    if (existing) {
-      if (!existing.fuelTypes.includes(r.fuelType)) {
-        existing.fuelTypes.push(r.fuelType)
-      }
-    } else {
-      map.set(r.stationId, {
-        stationId: r.stationId,
-        siteName: r.siteName,
-        brandName: r.brandName,
-        address: r.address,
-        suburb: r.suburb,
-        latitude: r.latitude,
-        longitude: r.longitude,
-        fuelTypes: [r.fuelType],
-      })
-    }
-  }
-  return [...map.values()].sort((a, b) => a.siteName.localeCompare(b.siteName))
-}
-
-export function OutageList() {
+export function OutageList(): React.JSX.Element {
   const records = useFuelStore((s) => s.records)
   const selectedFuelTypes = useFuelStore((s) => s.selectedFuelTypes)
 
@@ -72,7 +20,7 @@ export function OutageList() {
         : allOutageRecords.filter((r) => selectedFuelTypes.includes(r.fuelType)),
     [allOutageRecords, selectedFuelTypes, allSelected]
   )
-  const stations = useMemo(() => groupByStation(filteredRecords), [filteredRecords])
+  const stations = useMemo(() => groupOutagesByStation(filteredRecords), [filteredRecords])
 
   if (allOutageRecords.length === 0) {
     return (
@@ -120,7 +68,7 @@ export function OutageList() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <OutageMapFit stations={stations} />
+          <MapAutoFit items={stations} />
           {stations.map((s) => (
             <CircleMarker
               key={s.stationId}

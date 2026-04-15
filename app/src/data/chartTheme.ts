@@ -1,6 +1,17 @@
+import type { CSSProperties } from 'react'
 import { useThemeStore } from './themeStore'
 
-export function useChartPalette() {
+export interface ChartPalette {
+  gridStroke: string
+  tickFill: string
+  axisLabelFill: string
+  tooltipContentStyle: CSSProperties
+  tooltipLabelStyle: CSSProperties
+  tooltipItemStyle: CSSProperties | undefined
+  legendWrapperStyle: CSSProperties
+}
+
+export function useChartPalette(): ChartPalette {
   const theme = useThemeStore((s) => s.theme)
   const isDark = theme === 'dark'
 

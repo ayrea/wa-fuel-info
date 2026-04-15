@@ -15,7 +15,7 @@ function routerBasename(): string | undefined {
   return trimmed === '' ? undefined : trimmed
 }
 
-function AppLayout() {
+function AppLayout(): React.JSX.Element {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Header />
@@ -28,7 +28,7 @@ function AppLayout() {
   )
 }
 
-function DashboardPage() {
+function DashboardPage(): React.JSX.Element {
   return (
     <div className="space-y-6">
       <SummaryCards />

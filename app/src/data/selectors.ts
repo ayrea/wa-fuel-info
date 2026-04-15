@@ -175,3 +175,38 @@ export function getOutageTrends(
 
   return result
 }
+
+export interface StationOutage {
+  stationId: number
+  siteName: string
+  brandName: string
+  address: string
+  suburb: string
+  latitude: number
+  longitude: number
+  fuelTypes: FuelType[]
+}
+
+export function groupOutagesByStation(records: FuelRecord[]): StationOutage[] {
+  const map = new Map<number, StationOutage>()
+  for (const r of records) {
+    const existing = map.get(r.stationId)
+    if (existing) {
+      if (!existing.fuelTypes.includes(r.fuelType)) {
+        existing.fuelTypes.push(r.fuelType)
+      }
+    } else {
+      map.set(r.stationId, {
+        stationId: r.stationId,
+        siteName: r.siteName,
+        brandName: r.brandName,
+        address: r.address,
+        suburb: r.suburb,
+        latitude: r.latitude,
+        longitude: r.longitude,
+        fuelTypes: [r.fuelType],
+      })
+    }
+  }
+  return [...map.values()].sort((a, b) => a.siteName.localeCompare(b.siteName))
+}

@@ -15,7 +15,7 @@ import { FUEL_COLORS, FUEL_LABELS } from '../../types/fuel'
 import type { FuelType } from '../../types/fuel'
 import { getPriceSummaries } from '../../data/selectors'
 
-export function PriceBarChart() {
+export function PriceBarChart(): React.JSX.Element {
   const records = useFuelStore((s) => s.records)
   const palette = useChartPalette()
   const summaries = useMemo(() => getPriceSummaries(records), [records])

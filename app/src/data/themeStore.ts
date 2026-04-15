@@ -14,11 +14,11 @@ function readStoredTheme(): Theme | null {
   return null
 }
 
-function applyDomTheme(theme: Theme) {
+function applyDomTheme(theme: Theme): void {
   document.documentElement.classList.toggle('dark', theme === 'dark')
 }
 
-function persistTheme(theme: Theme) {
+function persistTheme(theme: Theme): void {
   try {
     localStorage.setItem(THEME_STORAGE_KEY, theme)
   } catch {
@@ -48,7 +48,7 @@ export const useThemeStore = create<ThemeStore>((set, get) => ({
 }))
 
 /** Sync Zustand from DOM + localStorage (call before React root; matches inline script). */
-export function initThemeFromStorage() {
+export function initThemeFromStorage(): void {
   const stored = readStoredTheme()
   const fromDom = document.documentElement.classList.contains('dark') ? 'dark' : 'light'
   const theme = stored ?? fromDom

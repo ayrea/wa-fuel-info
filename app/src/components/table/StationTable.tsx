@@ -17,7 +17,7 @@ import { fuelWatchPriceColumnLabels } from '../../data/date'
 
 const columnHelper = createColumnHelper<FuelRecord>()
 
-export function StationTable() {
+export function StationTable(): React.JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([])
   const [fuelFilter, setFuelFilter] = useState<FuelType | ''>('')
   const [brandFilter, setBrandFilter] = useState('')

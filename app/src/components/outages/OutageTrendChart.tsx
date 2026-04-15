@@ -17,7 +17,7 @@ import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
 import { getDates, getOutageTrends } from '../../data/selectors'
 import { formatDateDdMm } from '../../data/date'
 
-export function OutageTrendChart() {
+export function OutageTrendChart(): React.JSX.Element {
   const records = useFuelStore((s) => s.records)
   const selectedFuelTypes = useFuelStore((s) => s.selectedFuelTypes)
   const palette = useChartPalette()

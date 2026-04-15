@@ -1,6 +1,6 @@
 import { useFuelStore } from '../data/store'
 import { FUEL_TYPES, FUEL_LABELS, FUEL_COLORS } from '../types/fuel'
-export function FuelTypeFilterBar() {
+export function FuelTypeFilterBar(): React.JSX.Element {
   const selectedFuelTypes = useFuelStore((s) => s.selectedFuelTypes)
   const toggleFuelType = useFuelStore((s) => s.toggleFuelType)
   const setSelectedFuelTypes = useFuelStore((s) => s.setSelectedFuelTypes)

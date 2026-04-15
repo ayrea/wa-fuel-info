@@ -18,7 +18,7 @@ import { FuelTypeFilterBar } from '../FuelTypeFilterBar'
 import { getDates, getTrends } from '../../data/selectors'
 import { formatDateDdMm } from '../../data/date'
 
-export function TrendChart() {
+export function TrendChart(): React.JSX.Element {
   const records = useFuelStore((s) => s.records)
   const selectedFuelTypes = useFuelStore((s) => s.selectedFuelTypes)
   const palette = useChartPalette()

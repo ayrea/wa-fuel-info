@@ -4,7 +4,7 @@ import { getLatestDate } from '../../data/selectors'
 import { formatWeekdayShortDateWithYearPerth } from '../../data/date'
 import { ThemeToggle } from './ThemeToggle'
 
-export function Header() {
+export function Header(): React.JSX.Element {
   const records = useFuelStore((s) => s.records)
   const latestDate = useMemo(() => getLatestDate(records), [records])
   const latestDisplayDate = useMemo(
