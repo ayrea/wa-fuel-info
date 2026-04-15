@@ -3,27 +3,31 @@ name: Fetch FuelWatch Data
 on:
   schedule:
     # 3:00 PM AWST (UTC+8) = 7:00 AM UTC, 30 min after FuelWatch publication deadline
-    - cron: '0 7 * * *'
+    - cron: "0 7 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     defaults:
       run:
         working-directory: app
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: app/package-lock.json
 
