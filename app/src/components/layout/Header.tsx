@@ -1,15 +1,20 @@
 import { useMemo } from 'react'
 import { useFuelStore } from '../../data/store'
 import { getLatestDate } from '../../data/selectors'
-import { formatWeekdayShortDateWithYearPerth } from '../../data/date'
+import { formatIsoTimeAsPerth, formatWeekdayShortDateWithYearPerth } from '../../data/date'
 import { ThemeToggle } from './ThemeToggle'
 
 export function Header(): React.JSX.Element {
   const records = useFuelStore((s) => s.records)
+  const updatedAt = useFuelStore((s) => s.updatedAt)
   const latestDate = useMemo(() => getLatestDate(records), [records])
   const latestDisplayDate = useMemo(
     () => (latestDate ? formatWeekdayShortDateWithYearPerth(latestDate) : ''),
     [latestDate]
+  )
+  const updatedTimeDisplay = useMemo(
+    () => (updatedAt ? formatIsoTimeAsPerth(updatedAt) : ''),
+    [updatedAt]
   )
 
   return (
@@ -19,7 +24,11 @@ export function Header(): React.JSX.Element {
           <h1 className="text-2xl font-bold tracking-tight">WA Fuel Info</h1>
           <p className="text-blue-200 text-sm mt-0.5">
             Western Australia Fuel Price Information
-            {latestDate && <span className="ml-2">— Data up to {latestDisplayDate}</span>}
+            {latestDate && (
+              <span className="ml-2">
+                — Data up to {latestDisplayDate} {updatedTimeDisplay} AWST
+              </span>
+            )}
           </p>
         </div>
         <ThemeToggle />

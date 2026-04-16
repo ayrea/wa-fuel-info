@@ -5,6 +5,8 @@ import { loadAllData } from './loader'
 
 interface FuelStore {
   records: FuelRecord[]
+  /** ISO 8601 UTC from manifest; null if missing */
+  updatedAt: string | null
   loading: boolean
   error: string | null
 
@@ -19,6 +21,7 @@ interface FuelStore {
 
 export const useFuelStore = create<FuelStore>((set, get) => ({
   records: [],
+  updatedAt: null,
   loading: false,
   error: null,
 
@@ -42,8 +45,8 @@ export const useFuelStore = create<FuelStore>((set, get) => ({
   loadData: async () => {
     set({ loading: true, error: null })
     try {
-      const records = await loadAllData()
-      set({ records, loading: false })
+      const { records, updatedAt } = await loadAllData()
+      set({ records, updatedAt, loading: false })
     } catch {
       set({ error: 'Failed to load fuel data', loading: false })
     }

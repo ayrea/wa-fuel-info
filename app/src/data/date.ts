@@ -41,6 +41,17 @@ const perthWeekdayWithYearFormatter = new Intl.DateTimeFormat('en-AU', {
   year: 'numeric',
 })
 
+const perthTimeFormatter = new Intl.DateTimeFormat('en-AU', {
+  timeZone: 'Australia/Perth',
+  hour: 'numeric',
+  minute: '2-digit',
+})
+
+/** Time only (AM/PM) from an ISO 8601 instant, in Perth. */
+export function formatIsoTimeAsPerth(iso: string): string {
+  return perthTimeFormatter.format(new Date(iso))
+}
+
 /** Weekday + date for a YYYY-MM-DD civil day as used by FuelWatch (Western Australia). */
 export function formatWeekdayShortDatePerth(dateStr: string): string {
   if (!ISO_DATE.test(dateStr)) return dateStr

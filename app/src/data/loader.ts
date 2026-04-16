@@ -19,7 +19,10 @@ async function loadFile(entry: ManifestEntry): Promise<FuelRecord[]> {
   return records
 }
 
-export async function loadAllData(): Promise<FuelRecord[]> {
+export async function loadAllData(): Promise<{
+  records: FuelRecord[]
+  updatedAt: string | null
+}> {
   const manifest = await fetchManifest()
   const results: FuelRecord[] = []
 
@@ -31,5 +34,5 @@ export async function loadAllData(): Promise<FuelRecord[]> {
   const currentNames = new Set(manifest.files.map((f) => f.name))
   pruneCache(currentNames)
 
-  return results
+  return { records: results, updatedAt: manifest.updatedAt ?? null }
 }
