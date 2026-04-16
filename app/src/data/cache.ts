@@ -1,6 +1,6 @@
 import type { FuelRecord } from '../types/fuel'
 
-const DB_NAME = 'fuelwatch-cache'
+const DB_NAME = 'fuelinfo-cache'
 const DB_VERSION = 1
 const STORE_NAME = 'data-files'
 
