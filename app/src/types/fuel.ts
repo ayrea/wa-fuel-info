@@ -88,6 +88,8 @@ export interface ManifestEntry {
 }
 
 export interface DataManifest {
+  /** ISO 8601 UTC timestamp of last fetch run */
+  updatedAt?: string
   files: ManifestEntry[]
 }
 

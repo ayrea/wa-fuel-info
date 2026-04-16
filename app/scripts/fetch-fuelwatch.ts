@@ -71,6 +71,7 @@ function cleanOldData(outputDir: string): void {
 }
 
 async function main(): Promise<void> {
+  const updatedAt = new Date().toISOString()
   const date = getDateString()
   const outputDir = join(import.meta.dirname ?? '.', '..', 'public', 'data')
 
@@ -113,7 +114,7 @@ async function main(): Promise<void> {
   cleanOldData(outputDir)
 
   console.log('\nGenerating manifest...')
-  generateManifest(outputDir)
+  generateManifest(outputDir, updatedAt)
 
   console.log('\nDone!')
 }

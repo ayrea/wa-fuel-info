@@ -98,7 +98,7 @@ export function normalizeStation(raw: RawStation, date: string, fuelType: string
   }
 }
 
-export function generateManifest(outputDir: string): void {
+export function generateManifest(outputDir: string, updatedAt?: string): void {
   const files = readdirSync(outputDir)
     .filter((f) => DATA_FILE_PATTERN.test(f))
     .sort()
@@ -116,6 +116,9 @@ export function generateManifest(outputDir: string): void {
   })
 
   const manifestPath = join(outputDir, 'manifest.json')
-  writeFileSync(manifestPath, JSON.stringify({ files: entries }, null, 2))
+  writeFileSync(
+    manifestPath,
+    JSON.stringify({ updatedAt: updatedAt ?? new Date().toISOString(), files: entries }, null, 2)
+  )
   console.log(`  Generated manifest.json (${entries.length} files indexed)`)
 }
