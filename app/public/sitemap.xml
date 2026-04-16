@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://wa-fuel-watch.com/dashboard</loc>
+    <loc>https://wa-fuel-info.com/dashboard</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://wa-fuel-watch.com/trends</loc>
+    <loc>https://wa-fuel-info.com/trends</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wa-fuel-watch.com/map</loc>
+    <loc>https://wa-fuel-info.com/map</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wa-fuel-watch.com/stations</loc>
+    <loc>https://wa-fuel-info.com/stations</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://wa-fuel-watch.com/outages</loc>
+    <loc>https://wa-fuel-info.com/outages</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://wa-fuel-watch.com/outage-trends</loc>
+    <loc>https://wa-fuel-info.com/outage-trends</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
