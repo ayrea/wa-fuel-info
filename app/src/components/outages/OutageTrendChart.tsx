@@ -155,68 +155,62 @@ export function OutageTrendChart(): React.JSX.Element {
         <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
           Hover over the chart to update map markers for that date.
         </p>
-        {activeDateStations.length === 0 ? (
-          <div className="rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/40 p-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            No stations without fuel for the selected date and fuel type filters.
-          </div>
-        ) : (
-          <div
-            className="rounded-lg border border-gray-100 dark:border-gray-700 overflow-hidden"
-            style={{ height: '350px' }}
+        <div
+          className="rounded-lg border border-gray-100 dark:border-gray-700 overflow-hidden"
+          style={{ height: '350px' }}
+        >
+          <MapContainer
+            center={[-31.95, 115.86]}
+            zoom={10}
+            scrollWheelZoom
+            style={{ height: '100%', width: '100%' }}
           >
-            <MapContainer
-              center={[-31.95, 115.86]}
-              zoom={10}
-              scrollWheelZoom
-              style={{ height: '100%', width: '100%' }}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <MapAutoFit items={activeDateStations} />
-              {activeDateStations.map((station) => (
-                <CircleMarker
-                  key={station.stationId}
-                  center={[station.latitude, station.longitude]}
-                  radius={8}
-                  pathOptions={{
-                    color: '#ea580c',
-                    fillColor: '#f97316',
-                    fillOpacity: 0.85,
-                    weight: 2,
-                  }}
-                >
-                  <Popup>
-                    <div className="text-sm dark:text-gray-100">
-                      <p className="font-bold text-gray-900 dark:text-gray-100">{station.siteName}</p>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        {station.address}, {station.suburb}
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <MapAutoFit items={activeDateStations} />
+            {activeDateStations.map((station) => (
+              <CircleMarker
+                key={station.stationId}
+                center={[station.latitude, station.longitude]}
+                radius={8}
+                pathOptions={{
+                  color: '#ea580c',
+                  fillColor: '#f97316',
+                  fillOpacity: 0.85,
+                  weight: 2,
+                }}
+              >
+                <Popup>
+                  <div className="text-sm dark:text-gray-100">
+                    <p className="font-bold text-gray-900 dark:text-gray-100">{station.siteName}</p>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      {station.address}, {station.suburb}
+                    </p>
+                    <p className="text-gray-500 dark:text-gray-500 text-xs">{station.brandName}</p>
+                    <div className="mt-2">
+                      <p className="text-xs font-medium text-orange-700 dark:text-orange-400">
+                        Unavailable fuels:
                       </p>
-                      <p className="text-gray-500 dark:text-gray-500 text-xs">{station.brandName}</p>
-                      <div className="mt-2">
-                        <p className="text-xs font-medium text-orange-700 dark:text-orange-400">
-                          Unavailable fuels:
-                        </p>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {station.fuelTypes.map((fuelType) => (
-                            <span
-                              key={fuelType}
-                              className="px-1.5 py-0.5 rounded text-xs font-medium text-white"
-                              style={{ backgroundColor: FUEL_COLORS[fuelType] }}
-                            >
-                              {fuelType}
-                            </span>
-                          ))}
-                        </div>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {station.fuelTypes.map((fuelType) => (
+                          <span
+                            key={fuelType}
+                            className="px-1.5 py-0.5 rounded text-xs font-medium text-white"
+                            style={{ backgroundColor: FUEL_COLORS[fuelType] }}
+                          >
+                            {fuelType}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                  </Popup>
-                </CircleMarker>
-              ))}
-            </MapContainer>
-          </div>
-        )}
+                  </div>
+                </Popup>
+              </CircleMarker>
+            ))}
+          </MapContainer>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
