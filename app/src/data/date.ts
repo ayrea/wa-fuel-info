@@ -52,6 +52,11 @@ export function formatIsoTimeAsPerth(iso: string): string {
   return perthTimeFormatter.format(new Date(iso))
 }
 
+/** Weekday + date + four-digit year from an ISO 8601 instant, in Perth. */
+export function formatIsoDateAsPerth(iso: string): string {
+  return perthWeekdayWithYearFormatter.format(new Date(iso))
+}
+
 /** Weekday + date for a YYYY-MM-DD civil day as used by FuelWatch (Western Australia). */
 export function formatWeekdayShortDatePerth(dateStr: string): string {
   if (!ISO_DATE.test(dateStr)) return dateStr
