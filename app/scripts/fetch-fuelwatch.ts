@@ -26,10 +26,10 @@ const BASE_URL = 'https://www.fuelwatch.wa.gov.au'
 const RETENTION_DAYS = 30
 
 function getDateString(): string {
-  const now = new Date()
-  const y = now.getFullYear()
-  const m = String(now.getMonth() + 1).padStart(2, '0')
-  const d = String(now.getDate()).padStart(2, '0')
+  const perthNow = new Date(Date.now() + 8 * 3600_000)
+  const y = perthNow.getUTCFullYear()
+  const m = String(perthNow.getUTCMonth() + 1).padStart(2, '0')
+  const d = String(perthNow.getUTCDate()).padStart(2, '0')
   return `${y}-${m}-${d}`
 }
 
