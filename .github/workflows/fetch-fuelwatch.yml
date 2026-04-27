@@ -3,7 +3,7 @@ name: Fetch FuelWatch Data
 on:
   schedule:
     # Runs daily at 03:30, 09:30, 15:30, and 21:30 UTC
-    - cron: "30 3/6 * * *"
+    - cron: "30 4/6 * * *"
   workflow_dispatch:
 
 permissions:
