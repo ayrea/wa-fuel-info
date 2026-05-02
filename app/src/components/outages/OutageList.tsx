@@ -73,7 +73,7 @@ export function OutageList(): React.JSX.Element {
             <CircleMarker
               key={s.stationId}
               center={[s.latitude, s.longitude]}
-              radius={8}
+              radius={10}
               pathOptions={{
                 color: '#ea580c',
                 fillColor: '#f97316',

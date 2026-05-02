@@ -174,7 +174,7 @@ export function OutageTrendChart(): React.JSX.Element {
               <CircleMarker
                 key={station.stationId}
                 center={[station.latitude, station.longitude]}
-                radius={8}
+                radius={10}
                 pathOptions={{
                   color: '#ea580c',
                   fillColor: '#f97316',

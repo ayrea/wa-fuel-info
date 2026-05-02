@@ -101,7 +101,7 @@ export function FuelMap(): React.JSX.Element {
               <CircleMarker
                 key={`${r.stationId}-${r.fuelType}`}
                 center={[r.latitude, r.longitude]}
-                radius={6}
+                radius={10}
                 pathOptions={{
                   color: priceColor(r.priceToday, minPrice, maxPrice),
                   fillColor: priceColor(r.priceToday, minPrice, maxPrice),
