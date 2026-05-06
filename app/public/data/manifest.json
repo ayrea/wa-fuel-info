@@ -1,27 +1,6 @@
 {
-  "updatedAt": "2026-05-05T23:16:10.407Z",
+  "updatedAt": "2026-05-06T07:12:59.589Z",
   "files": [
-    {
-      "name": "2026-04-05_98R.json",
-      "date": "2026-04-05",
-      "fuel": "98R",
-      "hash": "ec3008615428",
-      "size": 251958
-    },
-    {
-      "name": "2026-04-05_PUP.json",
-      "date": "2026-04-05",
-      "fuel": "PUP",
-      "hash": "036ccba1dcd1",
-      "size": 194064
-    },
-    {
-      "name": "2026-04-05_ULP.json",
-      "date": "2026-04-05",
-      "fuel": "ULP",
-      "hash": "4e44ebe1d061",
-      "size": 284774
-    },
     {
       "name": "2026-04-06_98R.json",
       "date": "2026-04-06",
@@ -1496,50 +1475,50 @@
       "name": "2026-05-06_98R.json",
       "date": "2026-05-06",
       "fuel": "98R",
-      "hash": "6b3afe0058e6",
-      "size": 282684
+      "hash": "093c2e270f46",
+      "size": 284153
     },
     {
       "name": "2026-05-06_BDL.json",
       "date": "2026-05-06",
       "fuel": "BDL",
-      "hash": "3fe9adf787e9",
-      "size": 175294
+      "hash": "4d6feae8a42a",
+      "size": 175737
     },
     {
       "name": "2026-05-06_DSL.json",
       "date": "2026-05-06",
       "fuel": "DSL",
-      "hash": "1df4fee376f8",
-      "size": 257624
+      "hash": "c93d219f33b7",
+      "size": 258941
     },
     {
       "name": "2026-05-06_E85.json",
       "date": "2026-05-06",
       "fuel": "E85",
-      "hash": "a808a3bc7917",
-      "size": 5049
+      "hash": "6bb3adf2afb9",
+      "size": 5061
     },
     {
       "name": "2026-05-06_LPG.json",
       "date": "2026-05-06",
       "fuel": "LPG",
-      "hash": "3401af32127d",
-      "size": 15382
+      "hash": "77482834a7d5",
+      "size": 15419
     },
     {
       "name": "2026-05-06_PUP.json",
       "date": "2026-05-06",
       "fuel": "PUP",
-      "hash": "44f93809e63f",
-      "size": 203954
+      "hash": "a6d20076e3d7",
+      "size": 204461
     },
     {
       "name": "2026-05-06_ULP.json",
       "date": "2026-05-06",
       "fuel": "ULP",
-      "hash": "b44a29cc67e5",
-      "size": 356754
+      "hash": "f167abf31950",
+      "size": 358354
     }
   ]
 }
