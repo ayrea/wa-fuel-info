@@ -1,4 +1,5 @@
-import { createBrowserRouter, Navigate, Outlet } from 'react-router'
+import { useEffect } from 'react'
+import { createBrowserRouter, Navigate, Outlet, useLocation } from 'react-router'
 import { Header } from './components/layout/Header'
 import { Footer } from './components/layout/Footer'
 import { TabNav } from './components/layout/TabNav'
@@ -15,12 +16,21 @@ function routerBasename(): string | undefined {
   return trimmed === '' ? undefined : trimmed
 }
 
+function ScrollToTop(): null {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [pathname])
+  return null
+}
+
 function AppLayout(): React.JSX.Element {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <ScrollToTop />
       <Header />
       <TabNav />
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-3 py-4 sm:px-4 md:px-4 md:py-6 max-md:pb-20">
         <Outlet />
       </main>
       <Footer />

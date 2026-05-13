@@ -152,13 +152,35 @@ export function OutageTrendChart(): React.JSX.Element {
             {hoveredDate ? '' : ' (default)'}
           </p>
         </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-          Hover over the chart to update map markers for that date.
+        <p className="sr-only" aria-live="polite">
+          Showing outages for {activeDate ? formatDateDdMmYyyy(activeDate) : 'latest date'}
         </p>
-        <div
-          className="rounded-lg border border-gray-100 dark:border-gray-700 overflow-hidden"
-          style={{ height: '350px' }}
-        >
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 md:mb-4">
+          <span className="md:hidden">Select a date below or hover over the chart to update map markers.</span>
+          <span className="hidden md:inline">Hover over the chart to update map markers for that date.</span>
+        </p>
+        <div className="mb-4 -mx-1 overflow-x-auto md:hidden">
+          <div className="flex gap-2 px-1 pb-1">
+            {dates.map((date) => {
+              const isActive = date === activeDate
+              return (
+                <button
+                  key={date}
+                  type="button"
+                  onClick={() => setHoveredDate(date)}
+                  className={`shrink-0 rounded-full border px-3 py-2 text-xs font-medium transition-colors ${
+                    isActive
+                      ? 'border-transparent bg-orange-500 text-white dark:bg-orange-600'
+                      : 'border-gray-300 bg-white text-gray-600 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300'
+                  }`}
+                >
+                  {formatDateDdMm(date)}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+        <div className="rounded-lg border border-gray-100 dark:border-gray-700 overflow-hidden isolate h-[45dvh] min-h-[280px] max-h-[400px] md:h-[350px] md:min-h-0 md:max-h-none">
           <MapContainer
             center={[-31.95, 115.86]}
             zoom={10}

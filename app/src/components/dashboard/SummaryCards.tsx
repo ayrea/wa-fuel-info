@@ -50,7 +50,7 @@ export function SummaryCards(): React.JSX.Element {
         {cards.map((c) => (
           <div
             key={c.label}
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5"
+            className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-5"
           >
             <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{c.label}</p>
             <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-1">{c.value}</p>
@@ -61,7 +61,7 @@ export function SummaryCards(): React.JSX.Element {
 
       {cheapestULP && expensiveULP && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-xl p-5">
+          <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-xl p-4 md:p-5">
             <p className="text-sm font-medium text-green-800 dark:text-green-300">
               {snapshotDayLabel ? `Cheapest ULP — ${snapshotDayLabel}` : 'Cheapest ULP'}
             </p>
@@ -71,7 +71,7 @@ export function SummaryCards(): React.JSX.Element {
             <p className="text-sm text-green-600 dark:text-green-400/90 mt-1">{cheapestULP.siteName}</p>
             <p className="text-xs text-green-500 dark:text-green-500/80">{cheapestULP.suburb}</p>
           </div>
-          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl p-5">
+          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl p-4 md:p-5">
             <p className="text-sm font-medium text-red-800 dark:text-red-300">
               {snapshotDayLabel ? `Most Expensive ULP — ${snapshotDayLabel}` : 'Most Expensive ULP'}
             </p>
@@ -83,7 +83,7 @@ export function SummaryCards(): React.JSX.Element {
           </div>
           <Link
             to={TAB_ROUTE_PATH.outages}
-            className="bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-xl p-5 text-left hover:bg-orange-100 dark:hover:bg-orange-950/60 transition-colors cursor-pointer block"
+            className="bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-xl p-4 md:p-5 text-left hover:bg-orange-100 dark:hover:bg-orange-950/60 transition-colors cursor-pointer block"
           >
             <p className="text-sm font-medium text-orange-800 dark:text-orange-300">Fuel Outages</p>
             <p className="text-2xl font-bold text-orange-700 dark:text-orange-400 mt-1">
@@ -98,7 +98,7 @@ export function SummaryCards(): React.JSX.Element {
       )}
 
       <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+        <div className="px-4 md:px-5 py-4 border-b border-gray-100 dark:border-gray-700">
           <h3 className="font-semibold text-gray-900 dark:text-gray-100">Price Summary by Fuel Type</h3>
           {snapshotDayLabel && (
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -106,7 +106,35 @@ export function SummaryCards(): React.JSX.Element {
             </p>
           )}
         </div>
-        <div className="overflow-x-auto">
+
+        <div className="md:hidden divide-y divide-gray-100 dark:divide-gray-700">
+          {summaries.map((s) => (
+            <article key={s.fuelType} className="p-4 md:p-5">
+              <h4 className="font-medium text-gray-900 dark:text-gray-100">{FUEL_LABELS[s.fuelType]}</h4>
+              <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-gray-500 dark:text-gray-400">Avg (¢/L)</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-100">{s.avg.toFixed(1)}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 dark:text-gray-400">Spread</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-100">{(s.max - s.min).toFixed(1)}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 dark:text-gray-400">Min (¢/L)</p>
+                  <p className="font-semibold text-green-600 dark:text-green-400">{s.min.toFixed(1)}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 dark:text-gray-400">Max (¢/L)</p>
+                  <p className="font-semibold text-red-600 dark:text-red-400">{s.max.toFixed(1)}</p>
+                </div>
+              </div>
+              <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">{s.count} stations</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm dark:text-gray-200">
             <thead className="bg-gray-50 dark:bg-gray-800/80">
               <tr>

@@ -40,7 +40,7 @@ export function OutageList(): React.JSX.Element {
         <FuelTypeFilterBar />
       </div>
 
-      <div className="bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-xl p-5">
+      <div className="bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 rounded-xl p-4 md:p-5">
         <div className="flex items-start gap-3">
           <span className="text-2xl">⚠️</span>
           <div>
@@ -54,10 +54,7 @@ export function OutageList(): React.JSX.Element {
         </div>
       </div>
 
-      <div
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
-        style={{ height: '350px' }}
-      >
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden isolate h-[45dvh] min-h-[280px] max-h-[400px] md:h-[350px] md:min-h-0 md:max-h-none">
         <MapContainer
           center={[-31.95, 115.86]}
           zoom={10}
@@ -81,7 +78,7 @@ export function OutageList(): React.JSX.Element {
                 weight: 2,
               }}
             >
-              <Popup>
+              <Popup maxWidth={320} minWidth={240} autoPan closeButton>
                 <div className="text-sm dark:text-gray-100">
                   <p className="font-bold text-gray-900 dark:text-gray-100">{s.siteName}</p>
                   <p className="text-gray-600 dark:text-gray-400">{s.address}, {s.suburb}</p>
@@ -108,13 +105,13 @@ export function OutageList(): React.JSX.Element {
       </div>
 
       <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+        <div className="px-4 md:px-5 py-4 border-b border-gray-100 dark:border-gray-700">
           <h3 className="font-semibold text-gray-900 dark:text-gray-100">Affected Stations</h3>
         </div>
         <div className="divide-y divide-gray-100 dark:divide-gray-700">
           {stations.map((s) => (
-            <div key={s.stationId} className="px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50">
-              <div className="flex items-start justify-between gap-4">
+            <div key={s.stationId} className="px-4 md:px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <div>
                   <p className="font-medium text-gray-900 dark:text-gray-100">{s.siteName}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">{s.address}, {s.suburb}</p>
@@ -122,7 +119,7 @@ export function OutageList(): React.JSX.Element {
                     {s.brandName}
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-1 shrink-0">
+                <div className="flex flex-wrap gap-1 sm:shrink-0">
                   {s.fuelTypes.map((ft) => (
                     <span
                       key={ft}
