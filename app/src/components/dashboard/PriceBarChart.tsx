@@ -29,7 +29,7 @@ export function PriceBarChart(): React.JSX.Element {
   }))
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
+    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-5">
       <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Average Price by Fuel Type (¢/L)</h3>
       <ResponsiveContainer width="100%" height={320}>
         <BarChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 20 }}>

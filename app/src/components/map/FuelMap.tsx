@@ -79,10 +79,7 @@ export function FuelMap(): React.JSX.Element {
         </div>
       </div>
 
-      <div
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
-        style={{ height: '600px' }}
-      >
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden isolate h-[60dvh] min-h-[320px] max-h-[600px] md:h-[600px] md:min-h-0 md:max-h-none">
         <MapContainer
           center={[-31.95, 115.86]}
           zoom={10}
@@ -109,7 +106,7 @@ export function FuelMap(): React.JSX.Element {
                   weight: 1,
                 }}
               >
-                <Popup>
+                <Popup maxWidth={320} minWidth={240} autoPan closeButton>
                   <div className="text-sm dark:text-gray-100">
                     <p className="font-bold text-gray-900 dark:text-gray-100">{r.siteName}</p>
                     <p className="text-gray-600 dark:text-gray-400">{r.address}, {r.suburb}</p>
@@ -119,7 +116,7 @@ export function FuelMap(): React.JSX.Element {
                         <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-600">
                           <th className="py-0.5 pr-2 font-medium align-bottom">Fuel</th>
                           <th className="py-0.5 px-1 font-medium align-bottom">{priceColumnLabels.first}</th>
-                          <th className="py-0.5 px-1 font-medium align-bottom">{priceColumnLabels.second}</th>
+                          <th className="hidden md:table-cell py-0.5 px-1 font-medium align-bottom">{priceColumnLabels.second}</th>
                           <th className="py-0.5 pl-1 w-0 font-medium align-bottom whitespace-nowrap" aria-label="Availability" />
                         </tr>
                       </thead>
@@ -139,8 +136,12 @@ export function FuelMap(): React.JSX.Element {
                               {rec.priceToday !== null ? rec.priceToday.toFixed(1) : (
                                 <span className="text-gray-400 dark:text-gray-500 font-normal italic">—</span>
                               )}
+                              <p className="mt-0.5 text-[11px] font-normal text-gray-600 dark:text-gray-300 md:hidden">
+                                {priceColumnLabels.second}:{' '}
+                                {rec.priceTomorrow !== null ? rec.priceTomorrow.toFixed(1) : '—'}
+                              </p>
                             </td>
-                            <td className="py-1 px-1 align-middle tabular-nums text-gray-600 dark:text-gray-300">
+                            <td className="hidden md:table-cell py-1 px-1 align-middle tabular-nums text-gray-600 dark:text-gray-300">
                               {rec.priceTomorrow !== null ? rec.priceTomorrow.toFixed(1) : '—'}
                             </td>
                             <td className="py-1 pl-1 align-middle text-orange-500 dark:text-orange-400 whitespace-nowrap font-medium">
