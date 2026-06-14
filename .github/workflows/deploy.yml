@@ -3,9 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [master]
-  workflow_run:
-    workflows: ["Fetch FuelWatch Data"]
-    types: [completed]
 
 permissions:
   contents: read
@@ -19,9 +16,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: >-
-      github.event_name == 'push' ||
-      github.event.workflow_run.conclusion == 'success'
     defaults:
       run:
         working-directory: app
