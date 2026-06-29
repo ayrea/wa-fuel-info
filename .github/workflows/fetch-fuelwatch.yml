@@ -7,16 +7,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
+  contents: write
+  actions: write
 
 jobs:
-  build:
+  fetch:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -42,21 +37,22 @@ jobs:
       - name: Fetch FuelWatch data
         run: npm run fetch-data
 
-      - name: Build
-        run: npm run build
+      - name: Check for changes
+        id: changes
+        working-directory: .
+        run: |
+          git add -A app/public/data/
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: app/dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update FuelWatch data $(date -u +%Y-%m-%d)"
+          git push
