@@ -1,6 +1,6 @@
 # WA Fuel Info
 
-A web application that visualizes Western Australia fuel prices from the [FuelWatch](https://www.fuelwatch.wa.gov.au) API. The live site is hosted at [wa-fuel-info.com](https://wa-fuel-info.com).
+A web application to visualizes Western Australia fuel prices from the [FuelWatch](https://www.fuelwatch.wa.gov.au) API. The live site is hosted at [wa-fuel-info.com](https://wa-fuel-info.com).
 
 The app aggregates historical fuel price snapshots and presents them through dashboards, charts, maps, and tables. It tracks seven fuel types: ULP, PUP, 98R, DSL, BDL, E85, and LPG.
 
