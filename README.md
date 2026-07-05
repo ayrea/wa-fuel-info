@@ -97,7 +97,7 @@ Fuel price data is not fetched live in the browser. Instead:
 1. A GitHub Actions workflow runs four times daily and calls the FuelWatch API
 2. Responses are normalized into JSON snapshots in `app/public/data/`
 3. A `manifest.json` index tracks available files and content hashes
-4. The browser loads the manifest, fetches data files, caches them in IndexedDB, and renders through a Zustand store
+4. The browser loads the manifest, fetches data files, caches them in IndexedDB, and renders through a Zustand store.
 
 Pushes to `master` trigger a separate workflow that builds and deploys the site to GitHub Pages.
 
