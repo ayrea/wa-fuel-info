@@ -1,4 +1,4 @@
-name: Fetch FuelWatch Data
+name: Update Data and Deploy
 
 on:
   schedule:
@@ -8,12 +8,20 @@ on:
 
 permissions:
   contents: write
-  actions: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  fetch:
+  update-and-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment-retry-1.outputs.page_url || steps.deployment-retry-2.outputs.page_url }}
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     defaults:
@@ -56,3 +64,55 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "chore: update FuelWatch data $(date -u +%Y-%m-%d)"
           git push
+
+      - name: Build
+        if: >-
+          steps.changes.outputs.changed == 'true' ||
+          github.event_name == 'workflow_dispatch'
+        run: npm run build
+
+      - name: Upload Pages artifact
+        if: >-
+          steps.changes.outputs.changed == 'true' ||
+          github.event_name == 'workflow_dispatch'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: app/dist
+
+      - id: deployment
+        if: >-
+          steps.changes.outputs.changed == 'true' ||
+          github.event_name == 'workflow_dispatch'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Wait before retry 1
+        if: >-
+          (steps.changes.outputs.changed == 'true' ||
+          github.event_name == 'workflow_dispatch') &&
+          steps.deployment.outcome == 'failure'
+        run: sleep 15
+
+      - id: deployment-retry-1
+        if: >-
+          (steps.changes.outputs.changed == 'true' ||
+          github.event_name == 'workflow_dispatch') &&
+          steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Wait before retry 2
+        if: >-
+          (steps.changes.outputs.changed == 'true' ||
+          github.event_name == 'workflow_dispatch') &&
+          steps.deployment.outcome == 'failure' &&
+          steps.deployment-retry-1.outcome == 'failure'
+        run: sleep 15
+
+      - id: deployment-retry-2
+        if: >-
+          (steps.changes.outputs.changed == 'true' ||
+          github.event_name == 'workflow_dispatch') &&
+          steps.deployment.outcome == 'failure' &&
+          steps.deployment-retry-1.outcome == 'failure'
+        uses: actions/deploy-pages@v4

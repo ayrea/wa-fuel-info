@@ -3,9 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [master]
-  workflow_run:
-    workflows: ["Fetch FuelWatch Data"]
-    types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -19,9 +17,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: >-
-      github.event_name == 'push' ||
-      github.event.workflow_run.conclusion == 'success'
     defaults:
       run:
         working-directory: app
@@ -57,8 +52,25 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment-retry-1.outputs.page_url || steps.deployment-retry-2.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Wait before retry 1
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 15
+
+      - id: deployment-retry-1
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Wait before retry 2
+        if: steps.deployment.outcome == 'failure' && steps.deployment-retry-1.outcome == 'failure'
+        run: sleep 15
+
+      - id: deployment-retry-2
+        if: steps.deployment.outcome == 'failure' && steps.deployment-retry-1.outcome == 'failure'
         uses: actions/deploy-pages@v4
