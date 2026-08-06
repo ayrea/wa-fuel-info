@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { RouterProvider } from 'react-router'
+import { RouterProvider } from 'react-router/dom'
 import { useFuelStore } from './data/store'
 import { router } from './router'
 
