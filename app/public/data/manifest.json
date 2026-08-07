@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-07T00:27:33.134Z",
+  "updatedAt": "2026-08-07T01:35:14.041Z",
   "files": [
     {
       "name": "2026-07-08_98R.json",
@@ -1489,8 +1489,8 @@
       "name": "2026-08-07_DSL.json",
       "date": "2026-08-07",
       "fuel": "DSL",
-      "hash": "1ce2ce41cb78",
-      "size": 266912
+      "hash": "2c183ed0e10c",
+      "size": 266923
     },
     {
       "name": "2026-08-07_E85.json",
@@ -1510,15 +1510,15 @@
       "name": "2026-08-07_PUP.json",
       "date": "2026-08-07",
       "fuel": "PUP",
-      "hash": "cfa80eee02f6",
-      "size": 205082
+      "hash": "59ac25314ca4",
+      "size": 205083
     },
     {
       "name": "2026-08-07_ULP.json",
       "date": "2026-08-07",
       "fuel": "ULP",
-      "hash": "9b92f3334498",
-      "size": 365519
+      "hash": "61e2dc3488b1",
+      "size": 365529
     }
   ]
 }
