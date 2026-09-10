@@ -1,55 +1,6 @@
 {
-  "updatedAt": "2026-09-09T19:20:25.316Z",
+  "updatedAt": "2026-09-10T00:21:06.187Z",
   "files": [
-    {
-      "name": "2026-08-10_98R.json",
-      "date": "2026-08-10",
-      "fuel": "98R",
-      "hash": "4347d614c1ad",
-      "size": 282873
-    },
-    {
-      "name": "2026-08-10_BDL.json",
-      "date": "2026-08-10",
-      "fuel": "BDL",
-      "hash": "5f45418d9b5b",
-      "size": 176125
-    },
-    {
-      "name": "2026-08-10_DSL.json",
-      "date": "2026-08-10",
-      "fuel": "DSL",
-      "hash": "c6e6a05bff90",
-      "size": 267275
-    },
-    {
-      "name": "2026-08-10_E85.json",
-      "date": "2026-08-10",
-      "fuel": "E85",
-      "hash": "556367272b74",
-      "size": 5064
-    },
-    {
-      "name": "2026-08-10_LPG.json",
-      "date": "2026-08-10",
-      "fuel": "LPG",
-      "hash": "e97f24c0049f",
-      "size": 15413
-    },
-    {
-      "name": "2026-08-10_PUP.json",
-      "date": "2026-08-10",
-      "fuel": "PUP",
-      "hash": "2dd0336093c6",
-      "size": 205547
-    },
-    {
-      "name": "2026-08-10_ULP.json",
-      "date": "2026-08-10",
-      "fuel": "ULP",
-      "hash": "ae0a0ee7f5c0",
-      "size": 366149
-    },
     {
       "name": "2026-08-11_98R.json",
       "date": "2026-08-11",
@@ -1524,50 +1475,50 @@
       "name": "2026-09-10_98R.json",
       "date": "2026-09-10",
       "fuel": "98R",
-      "hash": "511f6328dd4b",
-      "size": 282371
+      "hash": "ee6a05bb3d79",
+      "size": 282268
     },
     {
       "name": "2026-09-10_BDL.json",
       "date": "2026-09-10",
       "fuel": "BDL",
-      "hash": "dc9817c67f3c",
-      "size": 176613
+      "hash": "2d912a047fbf",
+      "size": 176476
     },
     {
       "name": "2026-09-10_DSL.json",
       "date": "2026-09-10",
       "fuel": "DSL",
-      "hash": "a81e8ac92675",
-      "size": 266482
+      "hash": "7999e59288c4",
+      "size": 266501
     },
     {
       "name": "2026-09-10_E85.json",
       "date": "2026-09-10",
       "fuel": "E85",
-      "hash": "1f06c113f344",
-      "size": 5046
+      "hash": "45e793ad847d",
+      "size": 5051
     },
     {
       "name": "2026-09-10_LPG.json",
       "date": "2026-09-10",
       "fuel": "LPG",
-      "hash": "6643b513cd10",
-      "size": 15377
+      "hash": "9e97327f4998",
+      "size": 15381
     },
     {
       "name": "2026-09-10_PUP.json",
       "date": "2026-09-10",
       "fuel": "PUP",
-      "hash": "7852d868530f",
-      "size": 205555
+      "hash": "5f8b9773d747",
+      "size": 205480
     },
     {
       "name": "2026-09-10_ULP.json",
       "date": "2026-09-10",
       "fuel": "ULP",
-      "hash": "8fed93e9a065",
-      "size": 365559
+      "hash": "a9895cae3003",
+      "size": 365510
     }
   ]
 }
